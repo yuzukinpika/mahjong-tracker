@@ -6,7 +6,7 @@
      リクエストは一切触らず、素通りさせる。
 ========================================================= */
 
-const CACHE_NAME = 'mahjong-v1';
+const CACHE_NAME = 'mahjong-v3';
 const PRECACHE_URLS = [
   './',
   './index.html',

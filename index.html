@@ -6,37 +6,35 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="麻雀成績">
-<meta name="theme-color" content="#0b1f1a">
+<meta name="theme-color" content="#2e5c45">
 <meta name="mobile-web-app-capable" content="yes">
 <link rel="manifest" href="./manifest.webmanifest">
 <link rel="apple-touch-icon" href="./icon-180.png">
 <title>麻雀成績記録</title>
 <style>
 :root{
-  --bg-0:#0a1612;
-  --bg-1:#0e2119;
-  --bg-2:#132a20;
-  --bg-3:#1a3428;
-  --panel:#123024;
-  --panel-2:#16392c;
-  --border:#254a3a;
-  --accent:#2ecc8f;
-  --accent-2:#1f9d6e;
-  --accent-deep:#0e3d2b;
-  --navy:#16263f;
-  --gold:#d4af37;
-  --text-0:#eaf5ef;
-  --text-1:#b9d3c6;
-  --text-2:#7fa294;
-  --danger:#e2555a;
-  --danger-deep:#7a2226;
-  --warn:#e0b34a;
-  --rank1:#d4af37;
-  --rank2:#c0c8d0;
-  --rank3:#c98a4b;
-  --rank4:#7a8a95;
-  --radius:14px;
-  --radius-sm:9px;
+  --felt-1:#2e5c45;
+  --felt-2:#24493a;
+  --ivory:#f8f4e9;
+  --ivory-2:#efe9d8;
+  --ivory-3:#fffdf6;
+  --card-border:#e6dec9;
+  --input-border:#d8cfb6;
+  --text-card:#33443b;
+  --text-card-dim:#5d6d63;
+  --heading:#1f4534;
+  --green-deep:#2f6e4f;
+  --green-deep-2:#25573f;
+  --red:#b3402f;
+  --gold:#a8862f;
+  --gold-soft:#c9a94a;
+  --rank1:#a8862f;
+  --rank2:#5f7b6d;
+  --rank3:#2f6e4f;
+  --rank4:#8a7a63;
+  --grid-line:#e0d8c2;
+  --radius:16px;
+  --radius-sm:12px;
   --safe-bottom: env(safe-area-inset-bottom, 0px);
   --safe-top: env(safe-area-inset-top, 0px);
 }
@@ -44,11 +42,12 @@
 html,body{
   margin:0; padding:0; height:100%;
   background:
-    radial-gradient(1200px 800px at 20% -10%, #16392c 0%, transparent 60%),
-    radial-gradient(1000px 700px at 100% 0%, #16263f 0%, transparent 55%),
-    linear-gradient(180deg, var(--bg-0), var(--bg-1) 40%, #0a1a14 100%);
-  color:var(--text-0);
-  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans","Hiragino Kaku Gothic ProN","Yu Gothic",sans-serif;
+    radial-gradient(900px 500px at 50% -8%, rgba(255,255,255,0.08) 0%, transparent 55%),
+    linear-gradient(160deg, var(--felt-1), var(--felt-2));
+  color:var(--text-card);
+  font-family:"Hiragino Maru Gothic ProN","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",sans-serif;
+  line-height:1.5;
+  letter-spacing:0.02em;
   overscroll-behavior:none;
   -webkit-user-select:none;
   user-select:none;
@@ -73,12 +72,9 @@ header.topbar h1{
   margin:0;
   letter-spacing:0.02em;
   font-weight:700;
-  background:linear-gradient(90deg, var(--accent), var(--gold));
-  -webkit-background-clip:text;
-  background-clip:text;
-  color:transparent;
+  color:#fff;
 }
-header.topbar .sub{ font-size:11px; color:var(--text-2); margin-top:2px; }
+header.topbar .sub{ font-size:11px; color:rgba(255,255,255,0.72); margin-top:2px; }
 
 main{
   flex:1;
@@ -92,57 +88,75 @@ main{
 @keyframes fadeIn{ from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);} }
 
 .card{
-  background:linear-gradient(180deg, var(--panel-2), var(--panel));
-  border:1px solid var(--border);
+  background:var(--ivory);
+  border:1px solid var(--card-border);
   border-radius:var(--radius);
   padding:16px;
   margin-bottom:14px;
-  box-shadow:0 4px 18px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.03);
+  box-shadow:0 2px 10px rgba(20,45,35,0.18);
 }
 .card h2{
   font-size:15px;
   margin:0 0 12px;
-  color:var(--text-0);
+  color:var(--heading);
   display:flex;
   align-items:center;
   gap:8px;
   font-weight:700;
 }
+.card h2::before{
+  content:"";
+  display:inline-block;
+  width:16px; height:16px;
+  flex-shrink:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='0.75' y='0.75' width='14.5' height='14.5' rx='3' fill='%23fffdf6' stroke='%23d8cfb6' stroke-width='1'/%3E%3Ccircle cx='8' cy='8' r='3.4' fill='%23b3402f'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-size:contain;
+}
 .card h2 .badge{
   font-size:11px;
-  background:var(--accent-deep);
-  color:var(--accent);
+  background:var(--ivory-2);
+  color:var(--green-deep);
   padding:2px 8px;
   border-radius:20px;
   font-weight:600;
 }
 
-label.field{
+label.field, div.field{
   display:block;
   margin-bottom:14px;
 }
-label.field .lbl{
+label.field .lbl, div.field .lbl{
   display:block;
   font-size:12.5px;
-  color:var(--text-1);
+  color:var(--text-card-dim);
   margin-bottom:6px;
   font-weight:600;
 }
 input[type="text"], input[type="number"], input[type="date"], select, textarea{
   width:100%;
   min-height:44px;
-  background:var(--bg-2);
-  border:1px solid var(--border);
+  background:var(--ivory-3);
+  border:1px solid var(--input-border);
   border-radius:var(--radius-sm);
-  color:var(--text-0);
+  color:var(--text-card);
   font-size:16px;
   padding:8px 12px;
   font-family:inherit;
   outline:none;
 }
+select{
+  appearance:none;
+  -webkit-appearance:none;
+  padding-right:34px;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 9l6 6 6-6' fill='none' stroke='%232f6e4f' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-position:right 10px center;
+  background-size:16px;
+}
 input:focus, select:focus, textarea:focus{
-  border-color:var(--accent);
-  box-shadow:0 0 0 3px rgba(46,204,143,0.18);
+  border-color:var(--green-deep);
+  box-shadow:0 0 0 3px rgba(47,110,79,0.16);
 }
 textarea{ min-height:64px; resize:vertical; }
 
@@ -150,8 +164,8 @@ textarea{ min-height:64px; resize:vertical; }
   display:flex;
   flex-wrap:wrap;
   gap:6px;
-  background:var(--bg-2);
-  border:1px solid var(--border);
+  background:var(--ivory-2);
+  border:1px solid var(--card-border);
   border-radius:var(--radius-sm);
   padding:4px;
 }
@@ -161,23 +175,23 @@ textarea{ min-height:64px; resize:vertical; }
   min-height:40px;
   border:none;
   background:transparent;
-  color:var(--text-1);
+  color:var(--green-deep);
   font-size:14px;
   font-weight:600;
   border-radius:8px;
   font-family:inherit;
 }
 .seg button.active{
-  background:linear-gradient(180deg, var(--accent-2), var(--accent-deep));
+  background:var(--green-deep);
   color:#fff;
-  box-shadow:0 2px 8px rgba(46,204,143,0.3);
+  box-shadow:0 2px 8px rgba(47,110,79,0.28);
 }
-.seg.sm button{ min-height:40px; font-size:12.5px; padding:0 2px; }
+.seg.sm button{ min-height:36px; font-size:12.5px; padding:0 2px; }
 
 .field-row{
   display:flex;
   gap:8px;
-  margin-bottom:14px;
+  margin-bottom:10px;
   align-items:flex-start;
 }
 .field-row .field{
@@ -186,50 +200,25 @@ textarea{ min-height:64px; resize:vertical; }
   margin-bottom:0;
 }
 
-.rank-grid{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:6px;
-}
-.rank-grid.p3{ grid-template-columns:repeat(3,1fr); }
-.rank-grid.compact{ gap:5px; }
-.rank-btn{
-  min-height:44px;
-  border-radius:var(--radius-sm);
-  border:1px solid var(--border);
-  background:var(--bg-2);
-  color:var(--text-1);
-  font-size:15px;
-  font-weight:800;
-  font-family:inherit;
-}
-.rank-btn.active{
-  color:#0a1612;
-  border-color:transparent;
-}
-.rank-btn.active.r1{ background:linear-gradient(180deg,#f2d878,var(--rank1)); box-shadow:0 3px 10px rgba(212,175,55,0.4);}
-.rank-btn.active.r2{ background:linear-gradient(180deg,#e6ecf0,var(--rank2)); box-shadow:0 3px 10px rgba(192,200,208,0.35);}
-.rank-btn.active.r3{ background:linear-gradient(180deg,#e0aa73,var(--rank3)); box-shadow:0 3px 10px rgba(201,138,75,0.35);}
-.rank-btn.active.r4{ background:linear-gradient(180deg,#9fb0ba,var(--rank4)); box-shadow:0 3px 10px rgba(122,138,149,0.35);}
-
 .score-preview{
   margin-top:2px;
   padding:16px;
   border-radius:var(--radius-sm);
-  background:radial-gradient(120% 180% at 0% 0%, rgba(46,204,143,0.14), transparent 60%), var(--bg-2);
-  border:1px solid var(--border);
+  background:var(--ivory-3);
+  border:1px solid var(--card-border);
   text-align:center;
 }
 .score-preview .val{
   font-size:34px;
   font-weight:800;
   font-variant-numeric:tabular-nums;
+  color:var(--text-card);
 }
-.score-preview .val.pos{ color:var(--accent); }
-.score-preview .val.neg{ color:var(--danger); }
+.score-preview .val.pos{ color:var(--green-deep); }
+.score-preview .val.neg{ color:var(--red); }
 .score-preview .detail{
   font-size:11.5px;
-  color:var(--text-2);
+  color:var(--text-card-dim);
   margin-top:6px;
   line-height:1.6;
 }
@@ -239,40 +228,43 @@ textarea{ min-height:64px; resize:vertical; }
   width:100%;
   min-height:48px;
   border:none;
-  border-radius:var(--radius-sm);
+  border-radius:999px;
   font-size:16px;
   font-weight:700;
   font-family:inherit;
   color:#fff;
-  background:linear-gradient(180deg, var(--accent-2), var(--accent-deep));
-  box-shadow:0 4px 14px rgba(46,204,143,0.28);
+  background:var(--green-deep);
+  box-shadow:0 3px 10px rgba(47,110,79,0.28);
+  transition:transform .1s ease;
 }
+.btn:active{ transform:translateY(1px) scale(0.99); }
 .btn.secondary{
-  background:var(--bg-3);
-  color:var(--text-0);
+  background:var(--ivory-2);
+  color:var(--text-card-dim);
   box-shadow:none;
-  border:1px solid var(--border);
+  border:1px solid var(--card-border);
 }
 .btn.danger{
-  background:linear-gradient(180deg,#c0464b, var(--danger-deep));
-  box-shadow:0 4px 14px rgba(226,85,90,0.25);
+  background:var(--red);
+  box-shadow:0 3px 10px rgba(179,64,47,0.25);
 }
 .btn.ghost{
   background:transparent;
-  border:1px dashed var(--border);
-  color:var(--text-1);
+  border:1px dashed var(--input-border);
+  color:var(--green-deep);
   box-shadow:none;
+  border-radius:var(--radius-sm);
 }
 .btn.small{ min-height:40px; font-size:13.5px; padding:0 10px; }
 .btn-row{ display:flex; gap:10px; }
 .btn-row .btn{ flex:1; }
 
 .kans-item{
-  border:1px solid var(--border);
+  border:1px solid var(--card-border);
   border-radius:var(--radius-sm);
   padding:12px;
   margin-bottom:10px;
-  background:var(--bg-2);
+  background:var(--ivory-3);
 }
 .kans-item .kans-head{
   display:flex;
@@ -280,10 +272,10 @@ textarea{ min-height:64px; resize:vertical; }
   align-items:center;
   margin-bottom:8px;
 }
-.kans-item .kans-head .name{ font-weight:700; font-size:14.5px; }
-.kans-item .kans-head .res{ font-size:12.5px; color:var(--text-1); }
+.kans-item .kans-head .name{ font-weight:700; font-size:14.5px; color:var(--heading); }
+.kans-item .kans-head .res{ font-size:12.5px; color:var(--text-card-dim); }
 .kans-item .rm-btn{
-  background:none; border:none; color:var(--danger); font-size:13px; font-weight:700; padding:6px;
+  background:none; border:none; color:var(--red); font-size:13px; font-weight:700; padding:6px;
 }
 
 .tabbar{
@@ -292,9 +284,8 @@ textarea{ min-height:64px; resize:vertical; }
   display:flex;
   max-width:560px;
   margin:0 auto;
-  background:linear-gradient(180deg, rgba(14,33,25,0.85), rgba(8,20,15,0.97));
-  backdrop-filter:blur(14px);
-  border-top:1px solid var(--border);
+  background:var(--ivory);
+  border-top:1px solid var(--card-border);
   padding-bottom:var(--safe-bottom);
   z-index:50;
 }
@@ -303,7 +294,7 @@ textarea{ min-height:64px; resize:vertical; }
   min-height:58px;
   background:none;
   border:none;
-  color:var(--text-2);
+  color:#6b7d70;
   font-size:11px;
   font-family:inherit;
   display:flex;
@@ -314,21 +305,28 @@ textarea{ min-height:64px; resize:vertical; }
   font-weight:600;
   padding-top:6px;
 }
-.tabbar button .icon{ font-size:21px; line-height:1; }
-.tabbar button.active{ color:var(--accent); }
+.tabbar button .icon{
+  font-size:13px;
+  line-height:1;
+  padding:3px 14px;
+  border-radius:999px;
+}
+.tabbar button.active{ color:var(--green-deep); }
+.tabbar button.active .icon{ background:var(--green-deep); color:#fff; }
 
 .hist-item{
-  background:var(--panel);
-  border:1px solid var(--border);
+  background:var(--ivory);
+  border:1px solid var(--card-border);
   border-radius:var(--radius-sm);
   padding:12px 14px;
   margin-bottom:10px;
   display:flex;
   align-items:center;
   justify-content:space-between;
+  box-shadow:0 2px 8px rgba(20,45,35,0.1);
 }
-.hist-item .left .date{ font-size:12px; color:var(--text-2); }
-.hist-item .left .meta{ font-size:13px; color:var(--text-1); margin-top:2px; }
+.hist-item .left .date{ font-size:12px; color:var(--text-card-dim); }
+.hist-item .left .meta{ font-size:13px; color:var(--text-card); margin-top:2px; }
 .hist-item .right{ text-align:right; }
 .hist-item .right .rk{
   display:inline-block;
@@ -337,16 +335,16 @@ textarea{ min-height:64px; resize:vertical; }
   margin-bottom:4px;
 }
 .hist-item .right .sc{ font-size:18px; font-weight:800; font-variant-numeric:tabular-nums;}
-.rk.r1{ background:rgba(212,175,55,0.18); color:var(--rank1); }
-.rk.r2{ background:rgba(192,200,208,0.18); color:var(--rank2); }
-.rk.r3{ background:rgba(201,138,75,0.18); color:var(--rank3); }
-.rk.r4{ background:rgba(122,138,149,0.2); color:var(--rank4); }
-.pos{ color:var(--accent); } .neg{ color:var(--danger); }
+.rk.r1{ background:rgba(168,134,47,0.16); color:var(--rank1); }
+.rk.r2{ background:rgba(95,123,109,0.16); color:var(--rank2); }
+.rk.r3{ background:rgba(47,110,79,0.14); color:var(--rank3); }
+.rk.r4{ background:rgba(138,122,99,0.18); color:var(--rank4); }
+.pos{ color:var(--green-deep); } .neg{ color:var(--red); }
 
 .empty{
   text-align:center;
   padding:50px 20px;
-  color:var(--text-2);
+  color:rgba(255,255,255,0.75);
   font-size:13.5px;
 }
 .empty .big{ font-size:40px; margin-bottom:10px; }
@@ -358,36 +356,35 @@ textarea{ min-height:64px; resize:vertical; }
   margin-bottom:14px;
 }
 .stat-box{
-  background:var(--bg-2);
-  border:1px solid var(--border);
+  background:var(--ivory-3);
+  border:1px solid var(--card-border);
   border-radius:var(--radius-sm);
   padding:12px;
   text-align:center;
 }
-.stat-box .num{ font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; }
-.stat-box .lbl{ font-size:11px; color:var(--text-2); margin-top:4px; }
+.stat-box .num{ font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--green-deep); }
+.stat-box .lbl{ font-size:11px; color:var(--text-card-dim); margin-top:4px; }
 
 .bar-row{ display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:12.5px;}
-.bar-row .rlabel{ width:34px; color:var(--text-1); font-weight:700; flex-shrink:0;}
-.bar-track{ flex:1; height:16px; background:var(--bg-2); border-radius:8px; overflow:hidden; border:1px solid var(--border);}
+.bar-row .rlabel{ width:34px; color:var(--text-card); font-weight:700; flex-shrink:0;}
+.bar-track{ flex:1; height:16px; background:var(--ivory-2); border-radius:8px; overflow:hidden; border:1px solid var(--card-border);}
 .bar-fill{ height:100%; border-radius:8px; }
-.bar-row .pct{ width:52px; text-align:right; font-variant-numeric:tabular-nums; color:var(--text-1); flex-shrink:0; }
+.bar-row .pct{ width:52px; text-align:right; font-variant-numeric:tabular-nums; color:var(--text-card-dim); flex-shrink:0; }
 
-.note{ font-size:11px; color:var(--text-2); margin-top:6px; line-height:1.6; }
+.note{ font-size:11px; color:var(--text-card-dim); margin-top:6px; line-height:1.6; }
 
 .modal-overlay{
-  position:fixed; inset:0; background:rgba(4,10,8,0.72);
+  position:fixed; inset:0; background:rgba(20,40,30,0.45);
   display:none; align-items:flex-end; justify-content:center;
   z-index:100;
-  backdrop-filter:blur(2px);
 }
 .modal-overlay.active{ display:flex; }
 .modal-sheet{
   width:100%; max-width:560px;
   max-height:88vh;
-  background:linear-gradient(180deg, var(--bg-2), var(--bg-1));
+  background:var(--ivory);
   border-top-left-radius:20px; border-top-right-radius:20px;
-  border:1px solid var(--border);
+  border:1px solid var(--card-border);
   border-bottom:none;
   padding:16px 16px calc(20px + var(--safe-bottom));
   overflow-y:auto;
@@ -395,20 +392,29 @@ textarea{ min-height:64px; resize:vertical; }
 }
 @keyframes slideUp{ from{ transform:translateY(30px); opacity:0;} to{transform:translateY(0); opacity:1;} }
 .modal-sheet .handle{
-  width:40px; height:4px; background:var(--border); border-radius:4px; margin:0 auto 14px;
+  width:40px; height:4px; background:var(--card-border); border-radius:4px; margin:0 auto 14px;
 }
-.modal-sheet h3{ margin:0 0 14px; font-size:16px; }
+.modal-sheet h3{ margin:0 0 14px; font-size:16px; color:var(--heading); display:flex; align-items:center; gap:8px; }
+.modal-sheet h3::before{
+  content:"";
+  display:inline-block;
+  width:16px; height:16px;
+  flex-shrink:0;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect x='0.75' y='0.75' width='14.5' height='14.5' rx='3' fill='%23fffdf6' stroke='%23d8cfb6' stroke-width='1'/%3E%3Ccircle cx='8' cy='8' r='3.4' fill='%23b3402f'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;
+  background-size:contain;
+}
 
 .toast{
   position:fixed; left:50%; bottom:calc(90px + var(--safe-bottom));
   transform:translateX(-50%);
-  background:var(--bg-3); color:var(--text-0);
-  border:1px solid var(--border);
+  background:var(--green-deep); color:#fff;
+  border:none;
   padding:10px 18px; border-radius:20px; font-size:13px;
   z-index:200; opacity:0; transition:opacity .25s, transform .25s;
   pointer-events:none;
   max-width:80%; text-align:center;
-  box-shadow:0 6px 20px rgba(0,0,0,0.4);
+  box-shadow:0 6px 18px rgba(20,45,35,0.3);
 }
 .toast.show{ opacity:1; transform:translateX(-50%) translateY(-6px); }
 
@@ -418,29 +424,29 @@ textarea{ min-height:64px; resize:vertical; }
   min-height:36px;
 }
 .check-item input[type="checkbox"]{
-  width:22px; height:22px; accent-color:var(--accent); flex-shrink:0;
+  width:22px; height:22px; accent-color:var(--green-deep); flex-shrink:0;
 }
-.check-item label{ font-size:13.5px; color:var(--text-1); }
+.check-item label{ font-size:13.5px; color:var(--text-card); }
 
 .grid2{ display:grid; grid-template-columns:1fr 1fr; gap:12px;}
 .grid3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px;}
 
-hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
+hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
 
 .file-hidden{ display:none; }
 
 .kans-list-wrap{ margin-top:6px; }
 
 .detail-block{ margin-bottom:10px; }
-.detail-block .k{ font-size:11.5px; color:var(--text-2); }
-.detail-block .v{ font-size:14px; color:var(--text-0); font-weight:600; }
+.detail-block .k{ font-size:11.5px; color:var(--text-card-dim); }
+.detail-block .v{ font-size:14px; color:var(--text-card); font-weight:600; }
 
 .filter-seg{ margin-bottom:14px; }
 
 .disclosure{
-  border:1px solid var(--border);
+  border:1px solid var(--card-border);
   border-radius:var(--radius-sm);
-  background:var(--bg-2);
+  background:var(--ivory-3);
   margin:10px 0 4px;
   overflow:hidden;
 }
@@ -453,10 +459,10 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
   justify-content:space-between;
   font-size:13.5px;
   font-weight:700;
-  color:var(--text-1);
+  color:var(--text-card);
 }
 .disclosure summary::-webkit-details-marker{ display:none; }
-.disclosure summary .arrow{ transition:transform .15s; color:var(--text-2); font-size:12px; }
+.disclosure summary .arrow{ transition:transform .15s; color:var(--text-card-dim); font-size:12px; }
 .disclosure[open] summary .arrow{ transform:rotate(90deg); }
 .disclosure .disclosure-body{ padding:4px 14px 14px; }
 
@@ -466,20 +472,20 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
   min-height:40px;
   padding:0 10px;
   border-radius:var(--radius-sm);
-  border:1px solid var(--border);
-  background:var(--bg-2);
-  color:var(--text-1);
+  border:1px solid var(--card-border);
+  background:var(--ivory-3);
+  color:var(--text-card);
   font-size:14px;
   font-weight:700;
   font-family:inherit;
 }
 .honba-btn.active{
-  background:linear-gradient(180deg, var(--accent-2), var(--accent-deep));
+  background:var(--green-deep);
   color:#fff;
   border-color:transparent;
 }
 .honba-btn.disabled{ opacity:0.35; }
-.kaze-opt-disabled{ color:var(--text-2); }
+.kaze-opt-disabled{ color:var(--text-card-dim); }
 
 .sub-tabs{
   display:flex;
@@ -491,23 +497,23 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
   flex:1;
   min-width:64px;
   min-height:36px;
-  border:1px solid var(--border);
-  background:var(--bg-2);
-  color:var(--text-1);
+  border:1px solid var(--card-border);
+  background:var(--ivory-3);
+  color:var(--text-card);
   border-radius:20px;
   font-size:12.5px;
   font-weight:700;
   font-family:inherit;
 }
 .sub-tabs button.active{
-  background:linear-gradient(180deg, var(--accent-2), var(--accent-deep));
+  background:var(--green-deep);
   color:#fff;
   border-color:transparent;
 }
 
 .chip-item{
-  background:var(--panel);
-  border:1px solid var(--navy);
+  background:var(--ivory);
+  border:1px solid var(--card-border);
   border-left:3px solid var(--gold);
   border-radius:var(--radius-sm);
   padding:12px 14px;
@@ -515,12 +521,13 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
   display:flex;
   align-items:center;
   justify-content:space-between;
+  box-shadow:0 2px 8px rgba(20,45,35,0.1);
 }
-.chip-item .left .date{ font-size:12px; color:var(--text-2); }
+.chip-item .left .date{ font-size:12px; color:var(--text-card-dim); }
 .chip-item .left .meta{ font-size:13px; color:var(--gold); margin-top:2px; font-weight:700; }
 .chip-item .right{ display:flex; align-items:center; gap:10px; }
 .chip-item .right .amt{ font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; }
-.chip-item .rm-btn{ background:none; border:none; color:var(--danger); font-size:13px; font-weight:700; padding:6px; }
+.chip-item .rm-btn{ background:none; border:none; color:var(--red); font-size:13px; font-weight:700; padding:6px; }
 
 .period-row{ display:flex; gap:8px; margin-top:10px; }
 .period-row select, .period-row input{ min-height:40px; }
@@ -533,10 +540,12 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
   padding:1px 7px; border-radius:12px;
   margin-left:6px;
 }
-.oyako-tag.oya{ background:rgba(212,175,55,0.18); color:var(--gold); }
-.oyako-tag.ko{ background:rgba(127,162,148,0.18); color:var(--text-1); }
+.oyako-tag.oya{ background:rgba(168,134,47,0.16); color:var(--gold); }
+.oyako-tag.ko{ background:rgba(47,110,79,0.12); color:var(--green-deep); }
 
 ::-webkit-scrollbar{ width:0; height:0; }
+</content>
+</invoke>
 </style>
 </head>
 <body>
@@ -556,20 +565,20 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
       <div class="card">
         <h2>対局モード</h2>
         <div class="field-row">
-          <label class="field">
+          <div class="field">
             <span class="lbl">人数</span>
             <div class="seg sm" id="seg-players">
-              <button data-val="4" class="active">4人</button>
-              <button data-val="3">3人</button>
+              <button type="button" data-val="4" class="active">4人</button>
+              <button type="button" data-val="3">3人</button>
             </div>
-          </label>
-          <label class="field">
+          </div>
+          <div class="field">
             <span class="lbl">場</span>
             <div class="seg sm" id="seg-game">
-              <button data-val="東南" class="active">東南戦</button>
-              <button data-val="東風">東風戦</button>
+              <button type="button" data-val="東南" class="active">東南戦</button>
+              <button type="button" data-val="東風">東風戦</button>
             </div>
-          </label>
+          </div>
         </div>
       </div>
 
@@ -580,14 +589,14 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
           <input type="date" id="inputDate">
         </label>
         <div class="field-row">
-          <label class="field" style="flex:1.4;">
+          <div class="field">
             <span class="lbl">順位</span>
-            <div class="rank-grid compact" id="rankGrid"></div>
-          </label>
-          <label class="field">
+            <select id="selRank"></select>
+          </div>
+          <div class="field">
             <span class="lbl">自風（任意）</span>
-            <div class="seg sm" id="seg-jikaze"></div>
-          </label>
+            <select id="selJikaze"></select>
+          </div>
         </div>
         <label class="field" style="margin-bottom:0;">
           <span class="lbl">素点（例: 42300）</span>
@@ -606,7 +615,7 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
       <div class="card">
         <h2>局ごとの詳細記録（任意） <span class="badge" id="kansCountBadge">0局</span></h2>
         <div class="kans-list-wrap" id="kansList"></div>
-        <button class="btn ghost" id="btnAddKans" style="margin-top:4px;">＋ 局記録を追加</button>
+        <button type="button" class="btn ghost" id="btnAddKans" style="margin-top:4px;">＋ 局記録を追加</button>
       </div>
 
       <div class="card">
@@ -614,7 +623,7 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
         <textarea id="inputMemo" placeholder="振り返りメモなど"></textarea>
       </div>
 
-      <button class="btn" id="btnSaveGame">この対局を保存する</button>
+      <button type="button" class="btn" id="btnSaveGame">この対局を保存する</button>
       <div style="height:6px;"></div>
 
       <div class="card" style="margin-top:16px;">
@@ -627,7 +636,7 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
           <span class="lbl">枚数（プラマイ・整数）</span>
           <input type="number" inputmode="numeric" id="chipAmount" placeholder="例: 3 または -2" step="1">
         </label>
-        <button class="btn secondary" id="btnSaveChip">この日のチップ収支を保存</button>
+        <button type="button" class="btn secondary" id="btnSaveChip">この日のチップ収支を保存</button>
         <div class="note">同じ日付で既に記録がある場合は上書き確認が表示されます。</div>
       </div>
     </section>
@@ -637,9 +646,9 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
       <div class="card filter-seg">
         <h2>絞り込み</h2>
         <div class="seg" id="seg-hist-filter">
-          <button data-val="all" class="active">すべて</button>
-          <button data-val="4">4人麻雀</button>
-          <button data-val="3">3人麻雀</button>
+          <button type="button" data-val="all" class="active">すべて</button>
+          <button type="button" data-val="4">4人麻雀</button>
+          <button type="button" data-val="3">3人麻雀</button>
         </div>
         <div class="period-row">
           <select id="seg-hist-period-type" style="flex:1;">
@@ -662,9 +671,9 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
       <div class="card filter-seg">
         <h2>集計対象</h2>
         <div class="seg" id="seg-stats-filter">
-          <button data-val="all" class="active">すべて</button>
-          <button data-val="4">4人麻雀</button>
-          <button data-val="3">3人麻雀</button>
+          <button type="button" data-val="all" class="active">すべて</button>
+          <button type="button" data-val="4">4人麻雀</button>
+          <button type="button" data-val="3">3人麻雀</button>
         </div>
         <div class="period-row">
           <select id="seg-stats-period-type" style="flex:1;">
@@ -683,9 +692,9 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
       <div class="card">
         <h2>対局成績サマリー</h2>
         <div class="sub-tabs" id="stats-oyako-tabs">
-          <button data-val="all" class="active">全体</button>
-          <button data-val="oya">親</button>
-          <button data-val="ko">子</button>
+          <button type="button" data-val="all" class="active">全体</button>
+          <button type="button" data-val="oya">親</button>
+          <button type="button" data-val="ko">子</button>
         </div>
         <div class="stat-grid" id="statGridMain"></div>
         <div id="rankDist"></div>
@@ -793,22 +802,16 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
         <div class="note">両方の値を入力すると、統計画面に換算収支が表示されます。未設定のままなら換算表示は出ません。</div>
       </div>
 
-      <button class="btn" id="btnSaveSettings">設定を保存</button>
-
-      <div class="card" style="margin-top:16px;">
-        <h2>アカウント同期 <span class="badge" id="syncStatusBadge">未設定</span></h2>
-        <div id="syncArea"></div>
-        <div class="note">Firebaseプロジェクトを設定すると、複数端末間でデータを同期できます。設定しなくても今まで通りこの端末単体で完全に動作します。</div>
-      </div>
+      <button type="button" class="btn" id="btnSaveSettings">設定を保存</button>
 
       <div class="card" style="margin-top:16px;">
         <h2>データ管理</h2>
         <div class="btn-row" style="margin-bottom:10px;">
-          <button class="btn secondary" id="btnExport">JSONエクスポート</button>
-          <button class="btn secondary" id="btnImportTrigger">JSONインポート</button>
+          <button type="button" class="btn secondary" id="btnExport">JSONエクスポート</button>
+          <button type="button" class="btn secondary" id="btnImportTrigger">JSONインポート</button>
         </div>
         <input type="file" id="fileImport" class="file-hidden" accept="application/json,.json">
-        <button class="btn danger" id="btnResetAll">全データを削除</button>
+        <button type="button" class="btn danger" id="btnResetAll">全データを削除</button>
         <div class="note">エクスポートしたJSONファイルは端末に保存し、機種変更時などにインポートで復元できます。</div>
       </div>
 
@@ -823,10 +826,10 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
   </main>
 
   <nav class="tabbar" id="tabbar">
-    <button data-view="record" class="active"><span class="icon">📝</span>記録</button>
-    <button data-view="history"><span class="icon">📜</span>履歴</button>
-    <button data-view="stats"><span class="icon">📊</span>統計</button>
-    <button data-view="settings"><span class="icon">⚙️</span>設定</button>
+    <button type="button" data-view="record" class="active"><span class="icon">📝</span>記録</button>
+    <button type="button" data-view="history"><span class="icon">📜</span>履歴</button>
+    <button type="button" data-view="stats"><span class="icon">📊</span>統計</button>
+    <button type="button" data-view="settings"><span class="icon">⚙️</span>設定</button>
   </nav>
 
 </div>
@@ -852,554 +855,7 @@ hr.sep{ border:none; border-top:1px solid var(--border); margin:16px 0; }
 
 <script>
 'use strict';
-/* =========================================================
-   Firebaseログイン式マルチデバイス同期（アカウント同期）
-   - Firebase JS SDKは同梱せず、Identity Toolkit REST API と
-     Firestore REST API を fetch() で直接呼び出す軽量実装。
-   - ログイン無し・設定無しでも今まで通り完全動作すること。
-   - すべてのFirebase関連呼び出しはtry-catchでガードし、
-     オフライン/設定なしでアプリ本体が壊れないようにする。
-========================================================= */
 
-const FB_CONFIG_KEY = 'mahjongTrackerFbConfig';
-const FB_SESSION_KEY = 'mahjongTrackerFbSession'; // { refreshToken, email, uid }
-const BACKUP_KEY = 'mahjongTrackerData_backup';
-
-let fbConfig = null;       // { apiKey, projectId, ... }
-let fbSession = null;      // { refreshToken, idToken, uid, email, expiresAt }
-let syncState = 'idle';    // 'idle' | 'syncing' | 'synced' | 'offline' | 'error' | 'nologin' | 'noconfig'
-let syncLastAt = null;     // ISO string of last successful sync
-let syncPushTimer = null;
-let syncBusy = false;
-
-/* ---------- 寛容なfirebaseConfigパース ----------
-   正規JSON、およびキーが引用符なしのJSオブジェクトリテラル
-   （例: { apiKey: "xxx", authDomain: "xxx.firebaseapp.com" }）を
-   受け付ける。不正な場合はnullを返す。
-*/
-function parseFirebaseConfigLoose(text){
-  if(!text || typeof text !== 'string') return null;
-  let s = text.trim();
-  if(!s) return null;
-  // よくある "const firebaseConfig = {...};" のような代入文を剥がす
-  s = s.replace(/^[\s\S]*?(\{[\s\S]*\})[\s\S]*$/, '$1');
-  // まず正規JSONとして試す
-  try{
-    const obj = JSON.parse(s);
-    if(obj && typeof obj === 'object') return obj;
-  }catch(e){ /* fallthrough */ }
-  // キー無引用符のJS形式に対応: キー名の前後をダブルクォートで囲む
-  try{
-    let t = s;
-    t = t.replace(/([{,]\s*)([A-Za-z_$][A-Za-z0-9_$]*)\s*:/g, '$1"$2":');
-    // シングルクォート文字列をダブルクォートに変換
-    t = t.replace(/'([^']*)'/g, (m, inner)=> '"' + inner.replace(/"/g,'\\"') + '"');
-    // 末尾カンマを除去（例: {a:1,} や [1,2,]）
-    t = t.replace(/,(\s*[}\]])/g, '$1');
-    const obj2 = JSON.parse(t);
-    if(obj2 && typeof obj2 === 'object') return obj2;
-  }catch(e){ /* fallthrough */ }
-  return null;
-}
-
-function loadFbConfig(){
-  try{
-    const raw = localStorage.getItem(FB_CONFIG_KEY);
-    if(!raw) return null;
-    const obj = JSON.parse(raw);
-    if(obj && typeof obj === 'object' && obj.apiKey && obj.projectId) return obj;
-    return null;
-  }catch(e){
-    console.error('loadFbConfig failed', e);
-    return null;
-  }
-}
-
-function saveFbConfig(obj){
-  try{
-    localStorage.setItem(FB_CONFIG_KEY, JSON.stringify(obj));
-    return true;
-  }catch(e){
-    console.error('saveFbConfig failed', e);
-    return false;
-  }
-}
-
-function clearFbConfig(){
-  try{ localStorage.removeItem(FB_CONFIG_KEY); }catch(e){}
-}
-
-function loadFbSession(){
-  try{
-    const raw = localStorage.getItem(FB_SESSION_KEY);
-    if(!raw) return null;
-    const obj = JSON.parse(raw);
-    if(obj && typeof obj === 'object' && obj.refreshToken) return obj;
-    return null;
-  }catch(e){
-    console.error('loadFbSession failed', e);
-    return null;
-  }
-}
-
-function saveFbSession(obj){
-  try{
-    localStorage.setItem(FB_SESSION_KEY, JSON.stringify(obj));
-    return true;
-  }catch(e){
-    console.error('saveFbSession failed', e);
-    return false;
-  }
-}
-
-function clearFbSession(){
-  try{ localStorage.removeItem(FB_SESSION_KEY); }catch(e){}
-}
-
-/* ---------- Identity Toolkit (Auth) REST API ---------- */
-const IDENTITY_BASE = 'https://identitytoolkit.googleapis.com/v1/accounts';
-const TOKEN_BASE = 'https://securetoken.googleapis.com/v1/token';
-
-async function fbSignUp(email, password){
-  const url = `${IDENTITY_BASE}:signUp?key=${encodeURIComponent(fbConfig.apiKey)}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, returnSecureToken: true })
-  });
-  const data = await res.json();
-  if(!res.ok){
-    throw new Error(fbErrorMessage(data));
-  }
-  return data; // { idToken, refreshToken, localId, expiresIn, email }
-}
-
-async function fbSignIn(email, password){
-  const url = `${IDENTITY_BASE}:signInWithPassword?key=${encodeURIComponent(fbConfig.apiKey)}`;
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password, returnSecureToken: true })
-  });
-  const data = await res.json();
-  if(!res.ok){
-    throw new Error(fbErrorMessage(data));
-  }
-  return data;
-}
-
-async function fbRefreshIdToken(refreshToken){
-  const url = `${TOKEN_BASE}?key=${encodeURIComponent(fbConfig.apiKey)}`;
-  const body = 'grant_type=refresh_token&refresh_token=' + encodeURIComponent(refreshToken);
-  const res = await fetch(url, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-    body
-  });
-  const data = await res.json();
-  if(!res.ok){
-    throw new Error(fbErrorMessage(data));
-  }
-  // レスポンスキーはsnake_caseで返る
-  return {
-    idToken: data.id_token,
-    refreshToken: data.refresh_token,
-    expiresIn: data.expires_in,
-    uid: data.user_id
-  };
-}
-
-function fbErrorMessage(data){
-  const code = data && data.error && data.error.message;
-  const map = {
-    'EMAIL_EXISTS': 'このメールアドレスは既に登録されています',
-    'EMAIL_NOT_FOUND': 'メールアドレスまたはパスワードが正しくありません',
-    'INVALID_PASSWORD': 'メールアドレスまたはパスワードが正しくありません',
-    'INVALID_LOGIN_CREDENTIALS': 'メールアドレスまたはパスワードが正しくありません',
-    'USER_DISABLED': 'このアカウントは無効化されています',
-    'INVALID_EMAIL': 'メールアドレスの形式が正しくありません',
-    'TOO_MANY_ATTEMPTS_TRY_LATER': '試行回数が多すぎます。しばらくしてから再試行してください'
-  };
-  if(code && map[code]) return map[code];
-  if(code && code.indexOf('WEAK_PASSWORD') === 0) return 'パスワードは6文字以上にしてください';
-  if(code && code.indexOf('INVALID_API_KEY') >= 0) return 'Firebase設定（APIキー）が正しくありません';
-  return code ? ('エラー: ' + code) : '不明なエラーが発生しました';
-}
-
-/* 有効なidTokenを返す。期限切れなら自動でリフレッシュする。 */
-async function ensureIdToken(){
-  if(!fbSession || !fbSession.refreshToken) return null;
-  const now = Date.now();
-  if(fbSession.idToken && fbSession.expiresAt && now < fbSession.expiresAt - 60000){
-    return fbSession.idToken;
-  }
-  const refreshed = await fbRefreshIdToken(fbSession.refreshToken);
-  fbSession.idToken = refreshed.idToken;
-  fbSession.refreshToken = refreshed.refreshToken || fbSession.refreshToken;
-  fbSession.uid = refreshed.uid || fbSession.uid;
-  fbSession.expiresAt = Date.now() + (Number(refreshed.expiresIn || 3600) * 1000);
-  saveFbSession(fbSession);
-  return fbSession.idToken;
-}
-
-/* ---------- Firestore REST API ---------- */
-/* 保存先: users/{uid}/data/main ドキュメント。内容はJSON.stringify(DB)を
-   文字列フィールドに格納する（Firestoreはネスト配列を直接扱うと複雑になるため
-   丸ごと文字列化するのが安全）: { json: "...", updatedAt: "..." } */
-
-function firestoreDocUrl(uid){
-  const projectId = fbConfig.projectId;
-  return `https://firestore.googleapis.com/v1/projects/${encodeURIComponent(projectId)}/databases/(default)/documents/users/${encodeURIComponent(uid)}/data/main`;
-}
-
-async function firestoreGetMain(idToken, uid){
-  const url = firestoreDocUrl(uid);
-  const res = await fetch(url, {
-    method: 'GET',
-    headers: { 'Authorization': 'Bearer ' + idToken }
-  });
-  if(res.status === 404){
-    return null; // ドキュメント未作成
-  }
-  const data = await res.json();
-  if(!res.ok){
-    throw new Error((data && data.error && data.error.message) || 'Firestore取得に失敗しました');
-  }
-  const fields = data.fields || {};
-  const json = fields.json && fields.json.stringValue;
-  const updatedAt = fields.updatedAt && fields.updatedAt.stringValue;
-  if(!json) return null;
-  return { json, updatedAt: updatedAt || null };
-}
-
-async function firestoreSetMain(idToken, uid, jsonStr, updatedAt){
-  const url = firestoreDocUrl(uid) + '?updateMask.fieldPaths=json&updateMask.fieldPaths=updatedAt';
-  const body = {
-    fields: {
-      json: { stringValue: jsonStr },
-      updatedAt: { stringValue: updatedAt }
-    }
-  };
-  const res = await fetch(url, {
-    method: 'PATCH',
-    headers: {
-      'Authorization': 'Bearer ' + idToken,
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(body)
-  });
-  const data = await res.json();
-  if(!res.ok){
-    throw new Error((data && data.error && data.error.message) || 'Firestore保存に失敗しました');
-  }
-  return true;
-}
-
-/* =========================================================
-   同期判断ロジック（単体テスト可能な純粋関数）
-   remoteUpdatedAt / localUpdatedAt は ISO文字列 or null。
-   戻り値: 'pull' | 'push' | 'none'
-========================================================= */
-function decideSyncAction(localUpdatedAt, remoteUpdatedAt){
-  if(!remoteUpdatedAt && !localUpdatedAt) return 'none';
-  if(!remoteUpdatedAt) return 'push';
-  if(!localUpdatedAt) return 'pull';
-  const lt = Date.parse(localUpdatedAt);
-  const rt = Date.parse(remoteUpdatedAt);
-  if(isNaN(lt) && isNaN(rt)) return 'none';
-  if(isNaN(lt)) return 'pull';
-  if(isNaN(rt)) return 'push';
-  if(rt > lt) return 'pull';
-  if(lt > rt) return 'push';
-  return 'none';
-}
-
-/* =========================================================
-   同期の実行
-========================================================= */
-function setSyncState(state, opts){
-  syncState = state;
-  if(opts && opts.syncedAt) syncLastAt = opts.syncedAt;
-  renderSyncStatusBadge();
-}
-
-async function runSync(manual){
-  if(syncBusy) return;
-  if(!fbConfig){ setSyncState('noconfig'); return; }
-  if(!fbSession){ setSyncState('nologin'); return; }
-  if(typeof navigator !== 'undefined' && navigator.onLine === false){
-    setSyncState('offline');
-    return;
-  }
-  syncBusy = true;
-  setSyncState('syncing');
-  try{
-    const idToken = await ensureIdToken();
-    if(!idToken){ setSyncState('nologin'); syncBusy = false; return; }
-    const uid = fbSession.uid;
-    const remote = await firestoreGetMain(idToken, uid);
-    const localUpdatedAt = DB && DB.updatedAt ? DB.updatedAt : null;
-    const remoteUpdatedAt = remote ? remote.updatedAt : null;
-    const action = decideSyncAction(localUpdatedAt, remoteUpdatedAt);
-
-    if(action === 'pull'){
-      // ローカルを退避してからリモートで置き換える
-      try{
-        const rawLocal = localStorage.getItem(STORAGE_KEY);
-        if(rawLocal) localStorage.setItem(BACKUP_KEY, rawLocal);
-      }catch(e){ console.error('local backup failed', e); }
-
-      let parsed;
-      try{
-        parsed = JSON.parse(remote.json);
-      }catch(e){
-        throw new Error('リモートデータの解析に失敗しました');
-      }
-      if(!parsed || typeof parsed !== 'object') throw new Error('リモートデータの形式が不正です');
-      if(!parsed.settings) parsed.settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-      if(!parsed.settings[4]) parsed.settings[4] = JSON.parse(JSON.stringify(DEFAULT_SETTINGS[4]));
-      if(!parsed.settings[3]) parsed.settings[3] = JSON.parse(JSON.stringify(DEFAULT_SETTINGS[3]));
-      if(!Array.isArray(parsed.games)) parsed.games = [];
-      if(!Array.isArray(parsed.chips)) parsed.chips = [];
-      if(!parsed.exchange) parsed.exchange = defaultExchange();
-      if(!parsed.version) parsed.version = 1;
-      migrateData(parsed);
-      DB = parsed;
-      try{ localStorage.setItem(STORAGE_KEY, JSON.stringify(DB)); }catch(e){ console.error(e); }
-
-      // 画面再描画
-      refreshAllViewsAfterSync();
-      showToast('リモートのデータを取得しました');
-    }else if(action === 'push'){
-      const jsonStr = JSON.stringify(DB);
-      await firestoreSetMain(idToken, uid, jsonStr, localUpdatedAt || new Date().toISOString());
-    }
-    // action === 'none' の場合は何もしない
-
-    setSyncState('synced', { syncedAt: new Date().toISOString() });
-  }catch(e){
-    console.error('runSync failed', e);
-    setSyncState('error');
-    if(manual) showToast('同期に失敗しました: ' + (e && e.message ? e.message : ''));
-  }finally{
-    syncBusy = false;
-  }
-}
-
-function refreshAllViewsAfterSync(){
-  try{
-    if(typeof renderSettingsForm === 'function') renderSettingsForm();
-    if(typeof histPeriodCtrl !== 'undefined' && histPeriodCtrl) histPeriodCtrl.refreshYearOptions();
-    if(typeof statsPeriodCtrl !== 'undefined' && statsPeriodCtrl) statsPeriodCtrl.refreshYearOptions();
-    if(typeof renderHistory === 'function') renderHistory();
-    if(typeof renderStats === 'function') renderStats();
-    if(typeof initChipForm === 'function') initChipForm();
-  }catch(e){
-    console.error('refreshAllViewsAfterSync failed', e);
-  }
-}
-
-function scheduleSyncPush(){
-  try{
-    if(!fbConfig || !fbSession) return; // 未設定・未ログインなら何もしない
-    if(syncPushTimer) clearTimeout(syncPushTimer);
-    syncPushTimer = setTimeout(()=>{
-      runSync(false);
-    }, 2000);
-  }catch(e){
-    console.error('scheduleSyncPush failed', e);
-  }
-}
-
-/* =========================================================
-   設定タブUI
-========================================================= */
-function syncStatusLabel(){
-  switch(syncState){
-    case 'noconfig': return '未設定';
-    case 'nologin': return '未ログイン';
-    case 'syncing': return '同期中…';
-    case 'offline': return 'オフライン・未同期';
-    case 'error': return '同期エラー';
-    case 'synced': {
-      if(!syncLastAt) return '同期済み';
-      try{
-        const d = new Date(syncLastAt);
-        const m = String(d.getMonth()+1);
-        const day = String(d.getDate());
-        const hh = String(d.getHours()).padStart(2,'0');
-        const mm = String(d.getMinutes()).padStart(2,'0');
-        return `同期済み ${m}/${day} ${hh}:${mm}`;
-      }catch(e){ return '同期済み'; }
-    }
-    default: return '未設定';
-  }
-}
-
-function renderSyncStatusBadge(){
-  const badge = document.getElementById('syncStatusBadge');
-  if(badge) badge.textContent = syncStatusLabel();
-}
-
-function renderSyncArea(){
-  const area = document.getElementById('syncArea');
-  if(!area) return;
-  renderSyncStatusBadge();
-
-  if(!fbConfig){
-    area.innerHTML = `
-      <label class="field">
-        <span class="lbl">Firebase設定（firebaseConfigをそのまま貼り付け）</span>
-        <textarea id="fbConfigInput" placeholder='{ "apiKey": "...", "authDomain": "...", "projectId": "...", ... }' style="min-height:110px;"></textarea>
-      </label>
-      <div class="note" id="fbConfigError" style="color:var(--danger); display:none; margin-bottom:8px;"></div>
-      <button class="btn secondary" id="btnSaveFbConfig">Firebase設定を保存</button>
-      <div class="note">Firebaseコンソールで取得したfirebaseConfig（JSON形式でもJS形式でも可）を貼り付けてください。設定手順は「同期セットアップ手順.md」を参照してください。</div>
-    `;
-    const btn = document.getElementById('btnSaveFbConfig');
-    if(btn){
-      btn.addEventListener('click', ()=>{
-        const errEl = document.getElementById('fbConfigError');
-        const text = document.getElementById('fbConfigInput').value;
-        const parsed = parseFirebaseConfigLoose(text);
-        if(!parsed || !parsed.apiKey || !parsed.projectId){
-          if(errEl){
-            errEl.style.display = 'block';
-            errEl.textContent = 'Firebase設定の形式が正しくありません。apiKeyとprojectIdを含むfirebaseConfigを貼り付けてください。';
-          }
-          return;
-        }
-        if(errEl) errEl.style.display = 'none';
-        fbConfig = parsed;
-        saveFbConfig(parsed);
-        showToast('Firebase設定を保存しました');
-        renderSyncArea();
-      });
-    }
-    return;
-  }
-
-  if(!fbSession){
-    area.innerHTML = `
-      <div class="note" style="margin-bottom:10px;">Firebase設定: 保存済み（プロジェクトID: ${escapeHtml(fbConfig.projectId||'')}）</div>
-      <label class="field">
-        <span class="lbl">メールアドレス</span>
-        <input type="text" id="fbEmailInput" autocomplete="username" placeholder="example@example.com">
-      </label>
-      <label class="field">
-        <span class="lbl">パスワード</span>
-        <input type="text" id="fbPasswordInput" autocomplete="current-password" placeholder="6文字以上">
-      </label>
-      <div class="note" id="fbAuthError" style="color:var(--danger); display:none; margin-bottom:8px;"></div>
-      <div class="btn-row" style="margin-bottom:10px;">
-        <button class="btn" id="btnFbLogin">ログイン</button>
-        <button class="btn secondary" id="btnFbSignup">新規登録</button>
-      </div>
-      <button class="btn ghost" id="btnFbConfigReset">Firebase設定を削除</button>
-    `;
-    const errEl = document.getElementById('fbAuthError');
-    function showAuthErr(msg){
-      if(errEl){ errEl.style.display='block'; errEl.textContent = msg; }
-    }
-    async function doAuth(kind){
-      const email = document.getElementById('fbEmailInput').value.trim();
-      const password = document.getElementById('fbPasswordInput').value;
-      if(!email || !password){
-        showAuthErr('メールアドレスとパスワードを入力してください');
-        return;
-      }
-      if(errEl) errEl.style.display = 'none';
-      try{
-        const data = kind === 'signup' ? await fbSignUp(email, password) : await fbSignIn(email, password);
-        fbSession = {
-          refreshToken: data.refreshToken,
-          idToken: data.idToken,
-          uid: data.localId,
-          email: data.email || email,
-          expiresAt: Date.now() + (Number(data.expiresIn || 3600) * 1000)
-        };
-        saveFbSession(fbSession);
-        showToast(kind === 'signup' ? '新規登録しました' : 'ログインしました');
-        renderSyncArea();
-        runSync(true);
-      }catch(e){
-        console.error(kind+' failed', e);
-        showAuthErr(e && e.message ? e.message : '認証に失敗しました');
-      }
-    }
-    const loginBtn = document.getElementById('btnFbLogin');
-    const signupBtn = document.getElementById('btnFbSignup');
-    if(loginBtn) loginBtn.addEventListener('click', ()=> doAuth('login'));
-    if(signupBtn) signupBtn.addEventListener('click', ()=> doAuth('signup'));
-    const resetBtn = document.getElementById('btnFbConfigReset');
-    if(resetBtn){
-      resetBtn.addEventListener('click', ()=>{
-        if(!confirmAction('Firebase設定を削除しますか？（ログイン情報も削除されます）')) return;
-        clearFbConfig();
-        clearFbSession();
-        fbConfig = null;
-        fbSession = null;
-        setSyncState('noconfig');
-        renderSyncArea();
-        showToast('Firebase設定を削除しました');
-      });
-    }
-    return;
-  }
-
-  // ログイン中
-  area.innerHTML = `
-    <div class="note" style="margin-bottom:10px;">ログイン中: ${escapeHtml(fbSession.email || '')}</div>
-    <div class="btn-row" style="margin-bottom:10px;">
-      <button class="btn secondary" id="btnSyncNow">今すぐ同期</button>
-      <button class="btn ghost" id="btnFbLogout">ログアウト</button>
-    </div>
-  `;
-  const syncBtn = document.getElementById('btnSyncNow');
-  const logoutBtn = document.getElementById('btnFbLogout');
-  if(syncBtn) syncBtn.addEventListener('click', ()=> runSync(true));
-  if(logoutBtn){
-    logoutBtn.addEventListener('click', ()=>{
-      if(!confirmAction('ログアウトしますか？')) return;
-      clearFbSession();
-      fbSession = null;
-      setSyncState('nologin');
-      renderSyncArea();
-      showToast('ログアウトしました');
-    });
-  }
-}
-
-/* =========================================================
-   同期モジュールの初期化（起動時）
-   ログインなし・設定なしでも一切エラーが出ないようにガードする。
-========================================================= */
-function initSync(){
-  try{
-    fbConfig = loadFbConfig();
-    fbSession = loadFbSession();
-
-    if(!fbConfig){
-      setSyncState('noconfig');
-      return;
-    }
-    if(!fbSession){
-      setSyncState('nologin');
-      return;
-    }
-    // 起動時に一度だけ同期を試みる（オフラインなら自然に失敗し'offline'/'error'表示になるだけ）
-    setSyncState('idle');
-    runSync(false);
-  }catch(e){
-    // 万一の例外でもアプリ本体には影響させない
-    console.error('initSync failed', e);
-    try{ setSyncState('error'); }catch(e2){}
-  }
-}
-</script>
-
-<script>
-'use strict';
 
 /* =========================================================
    定数・データ層
@@ -1496,6 +952,11 @@ function computeOyako(kaze, jikaze, players){
        旧データにupdatedAtが無ければ現在時刻で補完する。
 ========================================================= */
 function sanitizeKanRiichiFields(k){
+  // 立直と副露は排他（立直は門前限定のため）。万一両方trueで渡された場合は
+  // 副露側を落として立直を優先する（新規保存分から排他を保証するための保険）。
+  if(k.riichi && k.fuuro){
+    k.fuuro = false;
+  }
   const isAgari = (k.result==='tsumo' || k.result==='ron');
   const eligible = isAgari && !!k.riichi;
   if(!eligible){
@@ -1564,7 +1025,6 @@ function saveData(){
   try{
     DB.updatedAt = new Date().toISOString();
     localStorage.setItem(STORAGE_KEY, JSON.stringify(DB));
-    scheduleSyncPush();
     return true;
   }catch(e){
     console.error('saveData failed', e);
@@ -1706,8 +1166,8 @@ document.getElementById('seg-players').addEventListener('click', (e)=>{
   recordState.rank = null;
   // 人数が変わると自風の選択肢(北の有無)が変わるため、3人麻雀選択中に北が選ばれていた場合は解除
   if(recordState.players === 3 && recordState.jikaze === '北') recordState.jikaze = null;
-  renderRankGrid();
-  renderJikazeSeg();
+  renderRankSelect();
+  renderJikazeSelect();
   updateScoreConfigBadge();
   updateScorePreview();
 });
@@ -1721,49 +1181,51 @@ document.getElementById('seg-game').addEventListener('click', (e)=>{
   recordState.gameType = btn.dataset.val;
 });
 
-function renderRankGrid(){
-  const grid = document.getElementById('rankGrid');
+/* 順位セレクト（人数に応じて1位〜n位の選択肢を再構築） */
+function renderRankSelect(){
+  const sel = document.getElementById('selRank');
   const n = recordState.players;
-  grid.className = 'rank-grid' + (n===3 ? ' p3' : '');
-  grid.innerHTML = '';
+  sel.innerHTML = '';
   for(let i=1;i<=n;i++){
-    const btn = document.createElement('button');
-    btn.className = 'rank-btn r'+i;
-    btn.textContent = i+'位';
-    btn.dataset.rank = i;
-    if(recordState.rank === i) btn.classList.add('active');
-    btn.addEventListener('click', ()=>{
-      recordState.rank = i;
-      renderRankGrid();
-      updateScorePreview();
-    });
-    grid.appendChild(btn);
+    const opt = document.createElement('option');
+    opt.value = String(i);
+    opt.textContent = i+'位';
+    sel.appendChild(opt);
+  }
+  // recordState.rankが現在の人数の範囲外なら1位にフォールバックしない（未選択状態を保持したい場合はnullのまま）
+  if(recordState.rank !== null && recordState.rank <= n){
+    sel.value = String(recordState.rank);
+  }else if(recordState.rank !== null){
+    // 人数減少で選択中の順位が範囲外になった場合はrankをクリア
+    recordState.rank = null;
   }
 }
+document.getElementById('selRank').addEventListener('change', (e)=>{
+  recordState.rank = parseInt(e.target.value, 10);
+  updateScorePreview();
+});
 
-/* 自風セグメント（4人=東南西北、3人=東南西） */
-function renderJikazeSeg(){
-  const wrap = document.getElementById('seg-jikaze');
+/* 自風セレクト（4人=東南西北、3人=東南西。未選択を許容） */
+function renderJikazeSelect(){
+  const sel = document.getElementById('selJikaze');
   const kazes = recordState.players === 3 ? ['東','南','西'] : ['東','南','西','北'];
-  wrap.innerHTML = '';
+  sel.innerHTML = '';
+  const noneOpt = document.createElement('option');
+  noneOpt.value = '';
+  noneOpt.textContent = '未選択';
+  sel.appendChild(noneOpt);
   kazes.forEach(k=>{
-    const btn = document.createElement('button');
-    btn.textContent = k;
-    btn.dataset.val = k;
-    if(recordState.jikaze === k) btn.classList.add('active');
-    wrap.appendChild(btn);
+    const opt = document.createElement('option');
+    opt.value = k;
+    opt.textContent = k;
+    sel.appendChild(opt);
   });
-  wrap.addEventListener('click', jikazeClickHandler);
+  sel.value = recordState.jikaze || '';
 }
-function jikazeClickHandler(e){
-  const btn = e.target.closest('button');
-  if(!btn) return;
-  const val = btn.dataset.val;
-  // 同じものを再タップしたら未選択に戻す（任意入力のため）
-  recordState.jikaze = (recordState.jikaze === val) ? null : val;
-  renderJikazeSeg();
+document.getElementById('selJikaze').addEventListener('change', (e)=>{
+  recordState.jikaze = e.target.value || null;
   renderKansList(); // 親子表示に影響するため再描画
-}
+});
 
 document.getElementById('inputDate').addEventListener('change', (e)=>{
   recordState.date = e.target.value;
@@ -1866,11 +1328,11 @@ function openKansModal(index){
         <select id="km-kyoku">${kyokuOptions}</select>
       </label>
     </div>
-    <label class="field">
+    <div class="field">
       <span class="lbl">本場</span>
       <div class="honba-grid" id="km-honba-grid"></div>
       <input type="number" inputmode="numeric" id="km-honba-custom" min="6" placeholder="本場数を入力（6以上）" style="display:none; margin-top:8px;">
-    </label>
+    </div>
     <div class="note" id="km-oyako-note" style="margin-bottom:12px;"></div>
     <label class="field">
       <span class="lbl">自分の結果</span>
@@ -1903,10 +1365,10 @@ function openKansModal(index){
       </div>
     </details>
     <div class="btn-row" style="margin-top:14px;">
-      <button class="btn secondary" id="km-cancel">キャンセル</button>
-      <button class="btn" id="km-save">${existing ? '更新する' : '追加する'}</button>
+      <button type="button" class="btn secondary" id="km-cancel">キャンセル</button>
+      <button type="button" class="btn" id="km-save">${existing ? '更新する' : '追加する'}</button>
     </div>
-    ${existing ? '<button class="btn ghost" id="km-delete" style="margin-top:10px;">この局記録を削除</button>' : ''}
+    ${existing ? '<button type="button" class="btn ghost" id="km-delete" style="margin-top:10px;">この局記録を削除</button>' : ''}
   `;
 
   document.getElementById('km-basho').value = initBasho;
@@ -1939,7 +1401,15 @@ function openKansModal(index){
     renderKansDynamicFields(null);
     updateRiichiDependentUI();
   });
-  document.getElementById('km-riichi').addEventListener('change', updateRiichiDependentUI);
+  document.getElementById('km-riichi').addEventListener('change', (e)=>{
+    // 立直と副露は排他（立直は門前限定のため、片方をONにしたらもう片方は自動でOFFにする）
+    if(e.target.checked) document.getElementById('km-fuuro').checked = false;
+    updateRiichiDependentUI();
+  });
+  document.getElementById('km-fuuro').addEventListener('change', (e)=>{
+    if(e.target.checked) document.getElementById('km-riichi').checked = false;
+    updateRiichiDependentUI();
+  });
   document.getElementById('km-urahit').addEventListener('change', updateRiichiDependentUI);
   document.getElementById('km-honba-custom').addEventListener('input', (e)=>{
     kmHonbaValue = parseInt(e.target.value,10) || 6;
@@ -2117,7 +1587,8 @@ function saveKansFromModal(){
     : kmHonbaValue;
   const result = document.getElementById('km-result').value;
   const riichi = document.getElementById('km-riichi').checked;
-  const fuuro = document.getElementById('km-fuuro').checked;
+  // 立直と副露は排他（UI側でも排他制御しているが、保存時にも保険として再チェックする）
+  const fuuro = riichi ? false : document.getElementById('km-fuuro').checked;
   const yakuMemo = document.getElementById('km-yaku').value.trim();
   const junmeEl = document.getElementById('km-junme');
 
@@ -2188,7 +1659,7 @@ function renderKansList(){
     div.innerHTML = `
       <div class="kans-head">
         <span class="name">${k.kaze}${k.honba>0 ? ' '+k.honba+'本場' : ''}${oyakoTag}</span>
-        <button class="rm-btn" data-idx="${idx}">削除</button>
+        <button type="button" class="rm-btn" data-idx="${idx}">削除</button>
       </div>
       <div class="res">${resultLabel(k.result)} ${scoreText} ${tags.length ? '／ '+tags.join('・') : ''}</div>
       ${k.yakuMemo ? `<div class="note">${escapeHtml(k.yakuMemo)}</div>` : ''}
@@ -2293,8 +1764,8 @@ function initRecordView(){
   document.querySelectorAll('#seg-game button').forEach(b=>{
     b.classList.toggle('active', b.dataset.val===recordState.gameType);
   });
-  renderRankGrid();
-  renderJikazeSeg();
+  renderRankSelect();
+  renderJikazeSelect();
   updateScoreConfigBadge();
   updateScorePreview();
   renderKansList();
@@ -2502,7 +1973,7 @@ function renderHistory(){
         </div>
         <div class="right">
           <div class="amt ${chip.amount>=0?'pos':'neg'}">${fmtSigned(chip.amount)}枚</div>
-          <button class="rm-btn" data-id="${chip.id}">削除</button>
+          <button type="button" class="rm-btn" data-id="${chip.id}">削除</button>
         </div>
       `;
       div.querySelector('.rm-btn').addEventListener('click', (e)=>{
@@ -2560,10 +2031,10 @@ function openGameDetail(id){
     <h3>局記録 (${game.kans ? game.kans.length : 0}件)</h3>
     ${kansHtml}
     <div class="btn-row" style="margin-top:16px;">
-      <button class="btn secondary" id="detail-edit">編集する</button>
-      <button class="btn danger" id="detail-delete">削除する</button>
+      <button type="button" class="btn secondary" id="detail-edit">編集する</button>
+      <button type="button" class="btn danger" id="detail-delete">削除する</button>
     </div>
-    <button class="btn ghost" id="detail-close" style="margin-top:10px;">閉じる</button>
+    <button type="button" class="btn ghost" id="detail-close" style="margin-top:10px;">閉じる</button>
   `;
 
   document.getElementById('detail-edit').addEventListener('click', ()=>{
@@ -2723,11 +2194,11 @@ function renderScoreChart(games){
   let svgParts = [];
 
   // グリッド軸ライン(0ライン)
-  svgParts.push(`<line x1="${padL}" y1="${zeroY}" x2="${W-padR}" y2="${zeroY}" stroke="var(--border)" stroke-width="1" stroke-dasharray="3,3" />`);
+  svgParts.push(`<line x1="${padL}" y1="${zeroY}" x2="${W-padR}" y2="${zeroY}" stroke="var(--grid-line)" stroke-width="1" stroke-dasharray="3,3" />`);
   // Y軸ラベル(max, min, 0)
-  svgParts.push(`<text x="${padL-4}" y="${padT+4}" font-size="8" fill="var(--text-2)" text-anchor="end">${fmtScore(maxV)}</text>`);
-  svgParts.push(`<text x="${padL-4}" y="${padT+plotH+4}" font-size="8" fill="var(--text-2)" text-anchor="end">${fmtScore(minV)}</text>`);
-  svgParts.push(`<text x="${padL-4}" y="${zeroY+3}" font-size="8" fill="var(--text-2)" text-anchor="end">0</text>`);
+  svgParts.push(`<text x="${padL-4}" y="${padT+4}" font-size="8" fill="var(--text-card-dim)" text-anchor="end">${fmtScore(maxV)}</text>`);
+  svgParts.push(`<text x="${padL-4}" y="${padT+plotH+4}" font-size="8" fill="var(--text-card-dim)" text-anchor="end">${fmtScore(minV)}</text>`);
+  svgParts.push(`<text x="${padL-4}" y="${zeroY+3}" font-size="8" fill="var(--text-card-dim)" text-anchor="end">0</text>`);
 
   // 折れ線パス
   const pathD = points.map((v,i)=>{
@@ -2741,13 +2212,13 @@ function renderScoreChart(games){
   svgParts.push(`
     <defs>
       <linearGradient id="scoreGrad" x1="0" y1="0" x2="0" y2="1">
-        <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.35"/>
-        <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"/>
+        <stop offset="0%" stop-color="var(--green-deep)" stop-opacity="0.28"/>
+        <stop offset="100%" stop-color="var(--green-deep)" stop-opacity="0"/>
       </linearGradient>
     </defs>
   `);
   svgParts.push(`<path d="${areaD}" fill="url(#scoreGrad)" stroke="none" />`);
-  svgParts.push(`<path d="${pathD}" fill="none" stroke="var(--accent)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />`);
+  svgParts.push(`<path d="${pathD}" fill="none" stroke="var(--green-deep)" stroke-width="2" stroke-linejoin="round" stroke-linecap="round" />`);
 
   // 各点（最後の点だけ強調、点が多い場合は間引き）
   const maxDots = 40;
@@ -2756,7 +2227,7 @@ function renderScoreChart(games){
     if(i!==0 && i!==points.length-1 && i % step !== 0) return;
     const x = xForI(i), y = yForV(v);
     const isLast = (i === points.length-1);
-    svgParts.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${isLast?3.2:2}" fill="${isLast ? 'var(--gold)' : 'var(--accent)'}" />`);
+    svgParts.push(`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${isLast?3.2:2}" fill="${isLast ? 'var(--gold)' : 'var(--green-deep)'}" />`);
   });
 
   svg.innerHTML = svgParts.join('');
@@ -2877,7 +2348,6 @@ function renderChipStats(games, chips){
    設定画面
 ========================================================= */
 function renderSettingsForm(){
-  if(typeof renderSyncArea === 'function') renderSyncArea();
   const s4 = DB.settings[4];
   const s3 = DB.settings[3];
   document.getElementById('cfg4-base').value = s4.basePoint;
@@ -3027,6 +2497,8 @@ document.getElementById('btnResetAll').addEventListener('click', ()=>{
    初期化
 ========================================================= */
 function init(){
+  // 旧バージョンで使用していたFirebase同期関連のローカルストレージを削除する（同期機能は廃止済み）
+  try{ localStorage.removeItem('mahjongTrackerFbConfig'); localStorage.removeItem('mahjongTrackerFbSession'); }catch(e){}
   DB = loadData();
   resetRecordState();
   initRecordView();
@@ -3037,7 +2509,6 @@ function init(){
   histPeriodCtrl.refreshYearOptions();
   statsPeriodCtrl.refreshYearOptions();
   switchView('record');
-  if(typeof initSync === 'function') initSync();
 }
 
 init();
