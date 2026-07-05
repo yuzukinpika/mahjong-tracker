@@ -1,0 +1,26 @@
+{
+  "name": "麻雀成績記録",
+  "short_name": "麻雀記録",
+  "description": "対局成績・局データ・チップ収支を記録するオフライン対応の麻雀成績記録アプリ",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0a1612",
+  "theme_color": "#0b1f1a",
+  "lang": "ja",
+  "icons": [
+    {
+      "src": "./icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}
