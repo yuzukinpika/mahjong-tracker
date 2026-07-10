@@ -2,11 +2,11 @@
 /* =========================================================
    麻雀成績記録 - Service Worker
    - シンプルなオフラインキャッシュ用途のみ。
-   - google系API (Identity Toolkit / Firestore など) への
-     リクエストは一切触らず、素通りさせる。
+   - 同一オリジンの静的ファイルだけをキャッシュする。
+   - アプリ更新時は CACHE_NAME を更新して、新しいキャッシュを確実に配布する。
 ========================================================= */
 
-const CACHE_NAME = 'mahjong-v3';
+const CACHE_NAME = 'mahjong-v4';
 const PRECACHE_URLS = [
   './',
   './index.html',
@@ -40,14 +40,8 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   const url = new URL(req.url);
 
-  // googleapis.com（Identity Toolkit / Firestore / securetoken等）は
-  // Service Workerで一切ハンドリングしない。素通りさせる。
-  if (url.hostname.endsWith('googleapis.com')) {
-    return;
-  }
-
-  // 同一オリジン以外（他のクロスオリジンリクエスト）も触らない。
-  if (url.origin !== self.location.origin) {
+  // GET以外・同一オリジン以外はキャッシュしない。
+  if (req.method !== 'GET' || url.origin !== self.location.origin) {
     return;
   }
 
@@ -59,8 +53,10 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(req)
         .then((res) => {
-          const resClone = res.clone();
-          caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
+          if (res.ok) {
+            const resClone = res.clone();
+            caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
+          }
           return res;
         })
         .catch(() => caches.match(req).then((cached) => cached || caches.match('./index.html')))
@@ -73,8 +69,10 @@ self.addEventListener('fetch', (event) => {
     caches.match(req).then((cached) => {
       if (cached) return cached;
       return fetch(req).then((res) => {
-        const resClone = res.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
+        if (res.ok) {
+          const resClone = res.clone();
+          caches.open(CACHE_NAME).then((cache) => cache.put(req, resClone));
+        }
         return res;
       }).catch(() => cached);
     })

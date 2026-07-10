@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="麻雀成績">
@@ -43,6 +43,7 @@ html,body{
   margin:0; padding:0; height:100%;
   background:
     radial-gradient(900px 500px at 50% -8%, rgba(255,255,255,0.08) 0%, transparent 55%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.018) 0 1px, transparent 1px 6px),
     linear-gradient(160deg, var(--felt-1), var(--felt-2));
   color:var(--text-card);
   font-family:"Hiragino Maru Gothic ProN","Hiragino Kaku Gothic ProN","Yu Gothic UI","Yu Gothic",sans-serif;
@@ -74,6 +75,32 @@ header.topbar h1{
   font-weight:700;
   color:#fff;
 }
+header.topbar .brand{
+  display:flex;
+  align-items:center;
+  gap:9px;
+}
+.brand-tiles{
+  display:flex;
+  gap:2px;
+  filter:drop-shadow(0 2px 2px rgba(12,35,24,0.22));
+}
+.brand-tile{
+  width:16px;
+  height:22px;
+  display:grid;
+  place-items:center;
+  border:1px solid #d7cfba;
+  border-radius:3px;
+  background:linear-gradient(145deg, #fffef9, #e9e2d1);
+  color:#b3402f;
+  font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
+  font-size:11px;
+  font-weight:700;
+  line-height:1;
+}
+.brand-tile:nth-child(2){ color:#2f6e4f; }
+.brand-tile:nth-child(3){ color:#b3402f; }
 header.topbar .sub{ font-size:11px; color:rgba(255,255,255,0.72); margin-top:2px; }
 
 main{
@@ -94,6 +121,17 @@ main{
   padding:16px;
   margin-bottom:14px;
   box-shadow:0 2px 10px rgba(20,45,35,0.18);
+  position:relative;
+  overflow:hidden;
+}
+.card::after{
+  content:"";
+  position:absolute;
+  inset:0 0 auto;
+  height:3px;
+  background:linear-gradient(90deg, transparent, rgba(168,134,47,0.55), transparent);
+  opacity:0.8;
+  pointer-events:none;
 }
 .card h2{
   font-size:15px;
@@ -215,6 +253,22 @@ textarea{ min-height:64px; resize:vertical; }
   background:var(--ivory-3);
   border:1px solid var(--card-border);
   text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.score-preview::before{
+  content:"点棒";
+  position:absolute;
+  top:8px;
+  left:10px;
+  padding:1px 6px;
+  border:1px solid var(--card-border);
+  border-radius:10px;
+  color:var(--gold);
+  background:rgba(248,244,233,0.86);
+  font-size:9px;
+  font-weight:700;
+  letter-spacing:0.08em;
 }
 .score-preview .val{
   font-size:34px;
@@ -314,13 +368,22 @@ textarea{ min-height:64px; resize:vertical; }
   padding-top:6px;
 }
 .tabbar button .icon{
+  width:27px;
+  height:21px;
+  display:grid;
+  place-items:center;
+  border:1px solid var(--card-border);
+  border-radius:4px;
+  background:var(--ivory-3);
+  box-shadow:0 1px 2px rgba(20,45,35,0.1);
+  font-family:"Hiragino Mincho ProN","Yu Mincho",serif;
   font-size:13px;
   line-height:1;
-  padding:3px 14px;
-  border-radius:999px;
+  font-weight:800;
 }
 .tabbar button.active{ color:var(--green-deep); }
-.tabbar button.active .icon{ background:var(--green-deep); color:#fff; }
+.tabbar button.active .icon{ background:#fffdf6; color:var(--green-deep); border-color:var(--gold-soft); box-shadow:0 0 0 2px rgba(168,134,47,0.16); }
+.tabbar .tile-wind{ color:#29342e; }
 
 .hist-item{
   background:var(--ivory);
@@ -355,6 +418,7 @@ textarea{ min-height:64px; resize:vertical; }
   color:rgba(255,255,255,0.75);
   font-size:13.5px;
 }
+.stat-grid .empty{ color:var(--text-card-dim); }
 .empty .big{ font-size:40px; margin-bottom:10px; }
 
 .stat-grid{
@@ -369,8 +433,22 @@ textarea{ min-height:64px; resize:vertical; }
   border-radius:var(--radius-sm);
   padding:12px;
   text-align:center;
+  position:relative;
+  overflow:hidden;
+}
+.stat-box::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:50%;
+  width:42px;
+  height:3px;
+  transform:translateX(-50%);
+  background:var(--gold-soft);
+  border-radius:0 0 3px 3px;
 }
 .stat-box .num{ font-size:22px; font-weight:800; font-variant-numeric:tabular-nums; color:var(--green-deep); }
+.stat-box .num.compact{ font-size:16px; line-height:1.45; }
 .stat-box .lbl{ font-size:11px; color:var(--text-card-dim); margin-top:4px; }
 
 .bar-row{ display:flex; align-items:center; gap:8px; margin-bottom:8px; font-size:12.5px;}
@@ -378,6 +456,7 @@ textarea{ min-height:64px; resize:vertical; }
 .bar-track{ flex:1; height:16px; background:var(--ivory-2); border-radius:8px; overflow:hidden; border:1px solid var(--card-border);}
 .bar-fill{ height:100%; border-radius:8px; }
 .bar-row .pct{ width:52px; text-align:right; font-variant-numeric:tabular-nums; color:var(--text-card-dim); flex-shrink:0; }
+.rank-group + .rank-group{ border-top:1px solid var(--card-border); margin-top:12px; padding-top:12px; }
 
 .note{ font-size:11px; color:var(--text-card-dim); margin-top:6px; line-height:1.6; }
 
@@ -560,9 +639,12 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
 <div id="app">
 
   <header class="topbar">
-    <div>
-      <h1>麻雀成績記録</h1>
-      <div class="sub" id="headerSub">対局を記録しよう</div>
+    <div class="brand">
+      <div class="brand-tiles" aria-label="白發中"><span class="brand-tile" aria-label="白"></span><span class="brand-tile">發</span><span class="brand-tile">中</span></div>
+      <div>
+        <h1>麻雀成績記録</h1>
+        <div class="sub" id="headerSub">対局を記録しよう</div>
+      </div>
     </div>
   </header>
 
@@ -599,11 +681,11 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
         <div class="field-row">
           <div class="field">
             <span class="lbl">順位</span>
-            <select id="selRank"></select>
+            <select id="selRank" aria-label="順位"></select>
           </div>
           <div class="field">
             <span class="lbl">自風（任意）</span>
-            <select id="selJikaze"></select>
+            <select id="selJikaze" aria-label="自風"></select>
           </div>
         </div>
         <label class="field" style="margin-bottom:0;">
@@ -659,7 +741,7 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
           <button type="button" data-val="3">3人麻雀</button>
         </div>
         <div class="period-row">
-          <select id="seg-hist-period-type" style="flex:1;">
+          <select id="hist-period-type" style="flex:1;">
             <option value="all">全期間</option>
             <option value="year">年選択</option>
             <option value="custom">カスタム</option>
@@ -679,12 +761,11 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
       <div class="card filter-seg">
         <h2>集計対象</h2>
         <div class="seg" id="seg-stats-filter">
-          <button type="button" data-val="all" class="active">すべて</button>
-          <button type="button" data-val="4">4人麻雀</button>
+          <button type="button" data-val="4" class="active">4人麻雀</button>
           <button type="button" data-val="3">3人麻雀</button>
         </div>
         <div class="period-row">
-          <select id="seg-stats-period-type" style="flex:1;">
+          <select id="stats-period-type" style="flex:1;">
             <option value="all">全期間</option>
             <option value="year">年選択</option>
             <option value="custom">カスタム</option>
@@ -699,11 +780,6 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
 
       <div class="card">
         <h2>対局成績サマリー</h2>
-        <div class="sub-tabs" id="stats-oyako-tabs">
-          <button type="button" data-val="all" class="active">全体</button>
-          <button type="button" data-val="oya">親</button>
-          <button type="button" data-val="ko">子</button>
-        </div>
         <div class="stat-grid" id="statGridMain"></div>
         <div id="rankDist"></div>
       </div>
@@ -717,11 +793,16 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
       <div class="card">
         <h2>局データ統計 <span class="badge" id="kanStatBadge">母数0局</span></h2>
         <div class="note" style="margin-bottom:8px;">※詳細記録を付けた局のみを集計しています（親子の判定は自風を選択した対局のみ）。</div>
+        <div class="sub-tabs" id="stats-oyako-tabs" aria-label="親子の絞り込み">
+          <button type="button" data-val="all" class="active">全体</button>
+          <button type="button" data-val="oya">親</button>
+          <button type="button" data-val="ko">子</button>
+        </div>
         <div class="stat-grid" id="statGridKan"></div>
       </div>
 
       <div class="card">
-        <h2>チップ・換算収支</h2>
+        <h2>チップ・換算収支 <span class="badge">人数共通</span></h2>
         <div class="stat-grid" id="statGridChip"></div>
         <div class="note" id="exchangeNote"></div>
       </div>
@@ -834,10 +915,10 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
   </main>
 
   <nav class="tabbar" id="tabbar">
-    <button type="button" data-view="record" class="active"><span class="icon">📝</span>記録</button>
-    <button type="button" data-view="history"><span class="icon">📜</span>履歴</button>
-    <button type="button" data-view="stats"><span class="icon">📊</span>統計</button>
-    <button type="button" data-view="settings"><span class="icon">⚙️</span>設定</button>
+    <button type="button" data-view="record" class="active"><span class="icon tile-wind" aria-hidden="true">東</span>記録</button>
+    <button type="button" data-view="history"><span class="icon tile-wind" aria-hidden="true">南</span>履歴</button>
+    <button type="button" data-view="stats"><span class="icon tile-wind" aria-hidden="true">西</span>統計</button>
+    <button type="button" data-view="settings"><span class="icon tile-wind" aria-hidden="true">北</span>設定</button>
   </nav>
 
 </div>
@@ -1005,6 +1086,139 @@ function migrateData(parsed){
   }
   parsed.version = DATA_VERSION;
   return parsed;
+}
+
+// インポート用の値検証。バックアップ以外のJSONを読み込んでも、表示・集計に必要な
+// 型だけをDBへ取り込むことで、壊れたデータやHTMLとして解釈される文字列を防ぐ。
+function safeInputString(value, maxLength){
+  if(typeof value !== 'string') return '';
+  return value.slice(0, maxLength || 1000);
+}
+
+function normalizedNumber(value, fallback, min, max){
+  if(value === '' || value === null || value === undefined) return fallback;
+  const n = Number(value);
+  if(!Number.isFinite(n)) return fallback;
+  if(n < min || n > max) return fallback;
+  return n;
+}
+
+function optionalInteger(value, min, max){
+  if(value === '' || value === null || value === undefined) return null;
+  const n = Number(value);
+  return Number.isInteger(n) && n >= min && n <= max ? n : null;
+}
+
+function safeDate(value){
+  return typeof value === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(value) ? value : null;
+}
+
+function normalizeRuleConfig(config, fallback, playerCount){
+  const raw = (config && typeof config === 'object') ? config : {};
+  return {
+    basePoint: normalizedNumber(raw.basePoint, fallback.basePoint, 0, 100000),
+    returnPoint: normalizedNumber(raw.returnPoint, fallback.returnPoint, 0, 100000),
+    uma: Array.from({length:playerCount}, (_, index)=>
+      normalizedNumber(Array.isArray(raw.uma) ? raw.uma[index] : undefined, fallback.uma[index], -1000, 1000)
+    )
+  };
+}
+
+function normalizeImportedKan(raw, players, jikaze){
+  if(!raw || typeof raw !== 'object') return null;
+  const kaze = safeInputString(raw.kaze, 4);
+  if(!/^[東南西][1-4]$/.test(kaze)) return null;
+  const result = RESULT_TYPES.some(type=>type.val===raw.result) ? raw.result : 'yoko';
+  const riichi = raw.riichi === true;
+  const kan = {
+    kaze,
+    honba: optionalInteger(raw.honba, 0, 99) ?? 0,
+    result,
+    riichi,
+    fuuro: riichi ? false : raw.fuuro === true,
+    ippatsu: raw.ippatsu === true,
+    uraHit: raw.uraHit === true,
+    yakuMemo: safeInputString(raw.yakuMemo, 500),
+    oyako: computeOyako(kaze, jikaze, players),
+    score: optionalInteger(raw.score, 0, 1000000),
+    han: optionalInteger(raw.han, 0, 99),
+    fu: optionalInteger(raw.fu, 0, 999),
+    uradora: optionalInteger(raw.uradora, 0, 99) ?? 0,
+    junme: optionalInteger(raw.junme, 1, 30)
+  };
+  return sanitizeKanRiichiFields(kan);
+}
+
+function normalizeImportedGame(raw, settings){
+  if(!raw || typeof raw !== 'object') return null;
+  const players = raw.players === 3 ? 3 : 4;
+  const date = safeDate(raw.date);
+  const rank = optionalInteger(raw.rank, 1, players);
+  const rawScore = normalizedNumber(raw.rawScore, null, -100000, 1000000);
+  if(!date || rank === null || rawScore === null) return null;
+
+  const jikazeOptions = players === 3 ? ['東','南','西'] : ['東','南','西','北'];
+  const jikaze = jikazeOptions.includes(raw.jikaze) ? raw.jikaze : null;
+  const configSnapshot = normalizeRuleConfig(raw.configSnapshot, settings[players], players);
+  const kans = (Array.isArray(raw.kans) ? raw.kans : [])
+    .map(k=>normalizeImportedKan(k, players, jikaze))
+    .filter(Boolean);
+
+  return {
+    id: safeInputString(raw.id, 100) || uid(),
+    createdAt: normalizedNumber(raw.createdAt, Date.now(), 0, Number.MAX_SAFE_INTEGER),
+    updatedAt: normalizedNumber(raw.updatedAt, Date.now(), 0, Number.MAX_SAFE_INTEGER),
+    players,
+    gameType: raw.gameType === '東風' ? '東風' : '東南',
+    date,
+    rank,
+    rawScore,
+    memo: safeInputString(raw.memo, 1000),
+    jikaze,
+    configSnapshot,
+    finalScore: calcFinalScore(rawScore, rank, configSnapshot, players).score,
+    kans
+  };
+}
+
+function normalizeImportedData(parsed){
+  const source = (parsed && typeof parsed === 'object') ? parsed : {};
+  const rawSettings = (source.settings && typeof source.settings === 'object') ? source.settings : {};
+  const settings = {
+    4: normalizeRuleConfig(rawSettings[4], DEFAULT_SETTINGS[4], 4),
+    3: normalizeRuleConfig(rawSettings[3], DEFAULT_SETTINGS[3], 3)
+  };
+  const games = (Array.isArray(source.games) ? source.games : [])
+    .map(game=>normalizeImportedGame(game, settings))
+    .filter(Boolean);
+  const chips = (Array.isArray(source.chips) ? source.chips : [])
+    .map(chip=>{
+      const date = safeDate(chip && chip.date);
+      const amount = optionalInteger(chip && chip.amount, -100000, 100000);
+      if(!date || amount === null) return null;
+      return {
+        id: safeInputString(chip.id, 100) || uid(),
+        date,
+        amount,
+        createdAt: normalizedNumber(chip.createdAt, Date.now(), 0, Number.MAX_SAFE_INTEGER),
+        updatedAt: normalizedNumber(chip.updatedAt, Date.now(), 0, Number.MAX_SAFE_INTEGER)
+      };
+    })
+    .filter(Boolean);
+  const exchangeSource = (source.exchange && typeof source.exchange === 'object') ? source.exchange : {};
+
+  return {
+    version: DATA_VERSION,
+    settings,
+    games,
+    chips,
+    exchange: {
+      unit: safeInputString(exchangeSource.unit, 20),
+      scorePt: normalizedNumber(exchangeSource.scorePt, null, -100000, 100000),
+      chipPt: normalizedNumber(exchangeSource.chipPt, null, -100000, 100000)
+    },
+    updatedAt: new Date().toISOString()
+  };
 }
 
 function loadData(){
@@ -1194,6 +1408,11 @@ function renderRankSelect(){
   const sel = document.getElementById('selRank');
   const n = recordState.players;
   sel.innerHTML = '';
+  const placeholder = document.createElement('option');
+  placeholder.value = '';
+  placeholder.textContent = '選択してください';
+  placeholder.disabled = true;
+  sel.appendChild(placeholder);
   for(let i=1;i<=n;i++){
     const opt = document.createElement('option');
     opt.value = String(i);
@@ -1207,9 +1426,10 @@ function renderRankSelect(){
     // 人数減少で選択中の順位が範囲外になった場合はrankをクリア
     recordState.rank = null;
   }
+  if(recordState.rank === null) sel.value = '';
 }
 document.getElementById('selRank').addEventListener('change', (e)=>{
-  recordState.rank = parseInt(e.target.value, 10);
+  recordState.rank = e.target.value === '' ? null : parseInt(e.target.value, 10);
   updateScorePreview();
 });
 
@@ -2074,7 +2294,7 @@ document.getElementById('modalDetail').addEventListener('click', (e)=>{
 /* =========================================================
    統計画面
 ========================================================= */
-let statsFilter = 'all';
+let statsFilter = '4';
 let statsPeriodCtrl = null;
 let statsOyakoTab = 'all'; // 'all' | 'oya' | 'ko'
 
@@ -2103,6 +2323,7 @@ function renderStats(){
   const games = filteredGames(statsFilter, period).slice().sort((a,b)=>{
     return (a.date||'').localeCompare(b.date||'') || a.createdAt - b.createdAt;
   });
+  // チップは日単位の記録で、3人／4人の成績とは別に期間合計を表示する。
   const chips = filteredChips(period);
 
   renderStatsMain(games);
@@ -2111,13 +2332,27 @@ function renderStats(){
   renderChipStats(games, chips);
 }
 
-// gameに紐づく「自分」の親子種別を対局単位で判定するのは局ごとに異なるため、
-// 対局統計における親/子絞り込みは「その対局の局記録に、該当する親/子の局が1つ以上あるか」ではなく、
-// 対局全体をオーナー視点で親局中心/子局中心に分けるのが困難なため、
-// ここでは対局サマリーの親/子タブは「自風が選択されている対局」を対象に、
-// その対局の局記録から親/子の内訳（和了・放銃等）を集計する形にする。
-// 「対局成績サマリー」自体（総対局数・平均順位・トップ率等）は対局単位の指標のため、
-// 自風が選択されている対局のみを対象に、全体/親局/子局の3切り口で局ベースの指標を出す。
+function renderRankDistribution(games, players){
+  const group = games.filter(g=>g.players===players);
+  if(group.length === 0) return '';
+
+  const rankCounts = Array.from({length:players}, (_, index)=>
+    group.filter(g=>g.rank===index+1).length
+  );
+  const lastCount = group.filter(g=>g.rank===players).length;
+  let html = `<div class="rank-group"><div class="note" style="margin-bottom:8px;">${players}人麻雀の順位分布（母数 ${group.length}対局／ラス率 ${(lastCount/group.length*100).toFixed(1)}%）</div>`;
+  rankCounts.forEach((count, index)=>{
+    const pct = count / group.length * 100;
+    html += `
+      <div class="bar-row">
+        <span class="rlabel">${index+1}位</span>
+        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${RANK_COLORS[index]};"></div></div>
+        <span class="pct">${pct.toFixed(1)}% (${count})</span>
+      </div>`;
+  });
+  return html + '</div>';
+}
+
 function renderStatsMain(games){
   const gridWrap = document.getElementById('statGridMain');
   const distWrap = document.getElementById('rankDist');
@@ -2130,39 +2365,36 @@ function renderStatsMain(games){
 
   const n = games.length;
   const totalScore = games.reduce((s,g)=>s+g.finalScore, 0);
-  const avgRank = games.reduce((s,g)=>s+g.rank, 0) / n;
-
-  // 順位分布は人数混在の場合4位/3位のカウントが混ざるため、最大人数(4)基準で0埋め
-  const maxPlayers = games.some(g=>g.players===4) ? 4 : 3;
-  const rankCounts = {};
-  for(let i=1;i<=maxPlayers;i++) rankCounts[i]=0;
-  games.forEach(g=>{ rankCounts[g.rank] = (rankCounts[g.rank]||0) + 1; });
-
-  const topRate = (rankCounts[1]||0) / n * 100;
-  const lastRate = (rankCounts[maxPlayers]||0) / n * 100;
+  const hasFourPlayerGames = games.some(g=>g.players===4);
+  const hasThreePlayerGames = games.some(g=>g.players===3);
+  const mixedPlayers = hasFourPlayerGames && hasThreePlayerGames;
+  const averageRank = players=>{
+    const group = games.filter(g=>g.players===players);
+    return group.length ? (group.reduce((s,g)=>s+g.rank, 0) / group.length).toFixed(2) : '-';
+  };
+  const avgRankText = mixedPlayers
+    ? `4人 ${averageRank(4)}<br>3人 ${averageRank(3)}`
+    : averageRank(hasFourPlayerGames ? 4 : 3);
+  const topRate = games.filter(g=>g.rank===1).length / n * 100;
+  const lastList = games.filter(g=>g.rank===g.players);
+  const lastRate = lastList.length / n * 100;
   const bustedList = games.filter(g=> g.rawScore < 0);
   const bustedRate = bustedList.length / n * 100;
 
   gridWrap.innerHTML = `
     <div class="stat-box"><div class="num">${n}</div><div class="lbl">総対局数</div></div>
-    <div class="stat-box"><div class="num">${avgRank.toFixed(2)}</div><div class="lbl">平均順位</div></div>
+    <div class="stat-box"><div class="num ${mixedPlayers?'compact':''}">${avgRankText}</div><div class="lbl">${mixedPlayers?'平均順位（別集計）':'平均順位'}</div></div>
     <div class="stat-box"><div class="num ${totalScore>=0?'pos':'neg'}">${fmtScore(totalScore)}</div><div class="lbl">合計スコア（収支）</div></div>
     <div class="stat-box"><div class="num">${topRate.toFixed(1)}%</div><div class="lbl">トップ率</div></div>
     <div class="stat-box"><div class="num">${bustedRate.toFixed(1)}%</div><div class="lbl">飛び率 (${bustedList.length}/${n})</div></div>
   `;
 
-  let distHtml = `<div class="note" style="margin-bottom:8px;">順位分布（母数 ${n}局／ラス率 ${lastRate.toFixed(1)}%）</div>`;
-  for(let i=1;i<=maxPlayers;i++){
-    const cnt = rankCounts[i]||0;
-    const pct = n ? (cnt/n*100) : 0;
-    distHtml += `
-      <div class="bar-row">
-        <span class="rlabel">${i}位</span>
-        <div class="bar-track"><div class="bar-fill" style="width:${pct}%; background:${RANK_COLORS[i-1]};"></div></div>
-        <span class="pct">${pct.toFixed(1)}% (${cnt})</span>
-      </div>`;
-  }
-  distWrap.innerHTML = distHtml;
+  const overallNote = mixedPlayers
+    ? `<div class="note" style="margin-bottom:8px;">全体ラス率 ${lastRate.toFixed(1)}%（各卓の最下位をラスとして計算）</div>`
+    : '';
+  distWrap.innerHTML = overallNote +
+    (hasFourPlayerGames ? renderRankDistribution(games, 4) : '') +
+    (hasThreePlayerGames ? renderRankDistribution(games, 3) : '');
 }
 
 function renderScoreChart(games){
@@ -2175,7 +2407,7 @@ function renderScoreChart(games){
     return;
   }
 
-  note.textContent = `対局ごとの累計スコア推移（全${games.length}局）`;
+  note.textContent = `対局ごとの累計スコア推移（全${games.length}対局）`;
 
   // 累計スコアの推移
   let cum = 0;
@@ -2333,6 +2565,7 @@ function renderChipStats(games, chips){
   `;
 
   const exchange = DB.exchange;
+  const chipScopeNote = 'チップは日単位の記録のため、4人／3人麻雀の絞り込み対象外です。';
   const hasExchange = exchange && exchange.scorePt !== null && exchange.scorePt !== undefined &&
                        exchange.chipPt !== null && exchange.chipPt !== undefined &&
                        !isNaN(Number(exchange.scorePt)) && !isNaN(Number(exchange.chipPt));
@@ -2341,12 +2574,13 @@ function renderChipStats(games, chips){
     const x = Number(exchange.scorePt), y = Number(exchange.chipPt);
     const total = totalScore * x + totalChips * y;
     const unit = exchange.unit || '';
+    const displayUnit = escapeHtml(unit);
     html += `
-      <div class="stat-box"><div class="num ${total>=0?'pos':'neg'}">${total.toLocaleString(undefined,{maximumFractionDigits:1})}${unit}</div><div class="lbl">換算収支</div></div>
+      <div class="stat-box"><div class="num ${total>=0?'pos':'neg'}">${total.toLocaleString(undefined,{maximumFractionDigits:1})}${displayUnit}</div><div class="lbl">換算収支</div></div>
     `;
-    note.textContent = `換算収支 = スコア合計${fmtScore(totalScore)}pt × ${x}${unit} ＋ チップ合計${fmtSigned(totalChips)}枚 × ${y}${unit}`;
+    note.textContent = `${chipScopeNote} 換算収支 = スコア合計${fmtScore(totalScore)}pt × ${x}${unit} ＋ チップ合計${fmtSigned(totalChips)}枚 × ${y}${unit}`;
   }else{
-    note.textContent = '設定タブで換算レートを入力すると、換算収支が表示されます。';
+    note.textContent = `${chipScopeNote} 設定タブで換算レートを入力すると、換算収支が表示されます。`;
   }
 
   wrap.innerHTML = html;
@@ -2457,23 +2691,16 @@ document.getElementById('fileImport').addEventListener('change', (e)=>{
       if(!confirmAction(`現在のデータを上書きしてインポートしますか？（${parsed.games.length}件の対局データ）`)){
         return;
       }
-      if(!parsed.settings){
-        parsed.settings = JSON.parse(JSON.stringify(DEFAULT_SETTINGS));
-      }
-      if(!parsed.settings[4]) parsed.settings[4] = JSON.parse(JSON.stringify(DEFAULT_SETTINGS[4]));
-      if(!parsed.settings[3]) parsed.settings[3] = JSON.parse(JSON.stringify(DEFAULT_SETTINGS[3]));
-      if(!Array.isArray(parsed.chips)) parsed.chips = [];
-      if(!parsed.exchange) parsed.exchange = defaultExchange();
-      if(!parsed.version) parsed.version = 1;
-      migrateData(parsed); // 旧バージョン(v1等)データのマイグレーションを適用
-      DB = parsed;
+      const originalGameCount = parsed.games.length;
+      DB = normalizeImportedData(parsed);
       saveData();
       renderSettingsForm();
       if(histPeriodCtrl) histPeriodCtrl.refreshYearOptions();
       if(statsPeriodCtrl) statsPeriodCtrl.refreshYearOptions();
       renderHistory();
       renderStats();
-      showToast('インポートが完了しました');
+      const skipped = originalGameCount - DB.games.length;
+      showToast(skipped > 0 ? `インポートが完了しました（不正な${skipped}件を除外）` : 'インポートが完了しました');
     }catch(err){
       console.error(err);
       showToast('ファイルの読み込みに失敗しました');
