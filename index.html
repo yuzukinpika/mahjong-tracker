@@ -616,6 +616,31 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
 .chip-item .right .amt{ font-size:18px; font-weight:800; font-variant-numeric:tabular-nums; }
 .chip-item .rm-btn{ background:none; border:none; color:var(--red); font-size:13px; font-weight:700; padding:6px; }
 
+.chip-amount-row{ display:flex; gap:8px; align-items:stretch; }
+.chip-amount-row input{ flex:1; min-width:0; }
+.chip-sign-toggle{
+  display:flex;
+  flex-shrink:0;
+  padding:3px;
+  border:1px solid var(--card-border);
+  border-radius:var(--radius-sm);
+  background:var(--ivory-2);
+}
+.chip-sign-toggle button{
+  width:42px;
+  min-height:36px;
+  border:none;
+  border-radius:8px;
+  background:transparent;
+  color:var(--text-card-dim);
+  font-family:inherit;
+  font-size:19px;
+  font-weight:800;
+}
+.chip-sign-toggle button.active[data-sign="1"]{ background:var(--green-deep); color:#fff; box-shadow:0 2px 6px rgba(47,110,79,0.26); }
+.chip-sign-toggle button.active[data-sign="-1"]{ background:var(--red); color:#fff; box-shadow:0 2px 6px rgba(179,64,47,0.22); }
+.chip-amount-row.negative input{ border-color:rgba(179,64,47,0.62); box-shadow:0 0 0 3px rgba(179,64,47,0.1); }
+
 .period-row{ display:flex; gap:8px; margin-top:10px; }
 .period-row select, .period-row input{ min-height:40px; }
 .custom-range{ display:flex; gap:8px; margin-top:10px; }
@@ -722,10 +747,16 @@ hr.sep{ border:none; border-top:1px solid var(--card-border); margin:16px 0; }
           <span class="lbl">日付</span>
           <input type="date" id="chipDate">
         </label>
-        <label class="field" style="margin-bottom:10px;">
-          <span class="lbl">枚数（プラマイ・整数）</span>
-          <input type="number" inputmode="numeric" id="chipAmount" placeholder="例: 3 または -2" step="1">
-        </label>
+        <div class="field" style="margin-bottom:10px;">
+          <span class="lbl" id="chipAmountLabel">獲得枚数（整数）</span>
+          <div class="chip-amount-row" id="chipAmountRow">
+            <div class="chip-sign-toggle" id="chipSignToggle" role="group" aria-label="チップ収支の符号">
+              <button type="button" data-sign="1" class="active" aria-label="プラス：獲得" aria-pressed="true">＋</button>
+              <button type="button" data-sign="-1" aria-label="マイナス：支払い" aria-pressed="false">－</button>
+            </div>
+            <input type="number" inputmode="numeric" id="chipAmount" aria-labelledby="chipAmountLabel" placeholder="例: 3" min="0" step="1">
+          </div>
+        </div>
         <button type="button" class="btn secondary" id="btnSaveChip">この日のチップ収支を保存</button>
         <div class="note">同じ日付で既に記録がある場合は上書き確認が表示されます。</div>
       </div>
@@ -2020,9 +2051,32 @@ function findChip(date){
   return DB.chips.find(c=>c.date===date);
 }
 
+let chipSign = 1;
+
+function renderChipSignToggle(){
+  const row = document.getElementById('chipAmountRow');
+  const label = document.getElementById('chipAmountLabel');
+  row.classList.toggle('negative', chipSign < 0);
+  label.textContent = chipSign > 0 ? '獲得枚数（整数）' : '支払い枚数（整数）';
+  document.querySelectorAll('#chipSignToggle button').forEach(btn=>{
+    const active = Number(btn.dataset.sign) === chipSign;
+    btn.classList.toggle('active', active);
+    btn.setAttribute('aria-pressed', String(active));
+  });
+}
+
+document.getElementById('chipSignToggle').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button[data-sign]');
+  if(!btn) return;
+  chipSign = Number(btn.dataset.sign);
+  renderChipSignToggle();
+});
+
 function initChipForm(){
   document.getElementById('chipDate').value = todayStr();
   document.getElementById('chipAmount').value = '';
+  chipSign = 1;
+  renderChipSignToggle();
 }
 
 document.getElementById('btnSaveChip').addEventListener('click', ()=>{
@@ -2030,11 +2084,12 @@ document.getElementById('btnSaveChip').addEventListener('click', ()=>{
   const amtEl = document.getElementById('chipAmount');
   const date = dateEl.value || todayStr();
   const amountRaw = amtEl.value;
-  if(amountRaw === '' || isNaN(parseInt(amountRaw,10))){
-    showToast('チップ枚数を入力してください');
+  const magnitude = Number(amountRaw);
+  if(amountRaw === '' || !Number.isInteger(magnitude) || magnitude < 0){
+    showToast('0以上の整数を入力してください');
     return;
   }
-  const amount = parseInt(amountRaw, 10);
+  const amount = chipSign * magnitude;
 
   const existing = findChip(date);
   if(existing){
